@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Shipment Booking Automation — Case Study · Gamma Wira</title>
+<meta name="description" content="How I compressed a 4-hour container booking process to 10 minutes for an Indonesian commodity exporter. Stack, architecture, and outcomes." />
+<meta name="theme-color" content="#0b1120" />
+<meta property="og:title" content="Case Study: Compressing 4hr → 10min container booking" />
+<meta property="og:description" content="End-to-end AI automation for an Indonesian commodity exporter. Python, Claude, Playwright, Win32 COM." />
+<meta property="og:image" content="https://gamskie.github.io/gammawira-portfolio/og.png" />
+<meta property="og:type" content="article" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2334d3dc'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='18' font-weight='bold' text-anchor='middle' fill='%230b1120'%3EG%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          ink: '#0b1120', ink2: '#10172a',
+          accent: '#34d3dc', accent2: '#6cdbe0',
+          muted: '#a8c3d7', line: '#1c2740',
+        },
+        fontFamily: {
+          sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+          mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+        },
+      },
+    },
+  };
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  body { background: radial-gradient(1200px 600px at 90% -10%, rgba(52,211,220,0.10), transparent 60%), radial-gradient(900px 600px at -10% 110%, rgba(52,211,220,0.06), transparent 60%), #0b1120; }
+  .grid-bg { background-image: linear-gradient(rgba(52,211,220,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(52,211,220,0.06) 1px, transparent 1px); background-size: 48px 48px; }
+  .prose-cs p { line-height: 1.7; }
+  .prose-cs h2 { font-size: 1.875rem; font-weight: 700; color: white; margin-top: 3rem; margin-bottom: 1rem; }
+  .prose-cs h3 { font-size: 1.25rem; font-weight: 600; color: white; margin-top: 2rem; margin-bottom: 0.75rem; }
+  .prose-cs ul { list-style: disc; padding-left: 1.5rem; }
+  .prose-cs li { margin-bottom: 0.5rem; }
+  .prose-cs code { font-family: 'JetBrains Mono', monospace; font-size: 0.875rem; background: rgba(52,211,220,0.08); padding: 0.125rem 0.375rem; border-radius: 4px; color: #6cdbe0; }
+  .prose-cs pre { background: #10172a; border: 1px solid #1c2740; border-radius: 12px; padding: 1.25rem; overflow-x: auto; font-size: 0.875rem; line-height: 1.6; }
+  .prose-cs pre code { background: transparent; padding: 0; color: #a8c3d7; }
+</style>
+</head>
+<body class="font-sans text-slate-200 antialiased">
+
+<header class="sticky top-0 z-40 backdrop-blur bg-ink/60 border-b border-line">
+  <nav class="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
+    <a href="../index.html" class="font-mono text-sm font-bold tracking-tight">
+      <span class="text-accent">~/</span><span>gammawira</span>
+    </a>
+    <div class="hidden md:flex items-center gap-8 text-sm text-muted">
+      <a href="../index.html#work" class="hover:text-accent transition">Work</a>
+      <a href="../index.html#stack" class="hover:text-accent transition">Stack</a>
+      <a href="../index.html#about" class="hover:text-accent transition">About</a>
+      <a href="../index.html#contact" class="hover:text-accent transition">Contact</a>
+    </div>
+    <a href="../index.html#contact" class="text-sm font-medium px-4 py-2 rounded-full bg-accent text-ink hover:bg-accent2 transition">Hire me →</a>
+  </nav>
+</header>
+
+<section class="relative overflow-hidden">
+  <div class="absolute inset-0 grid-bg opacity-50 pointer-events-none"></div>
+  <div class="max-w-4xl mx-auto px-6 pt-20 pb-12 relative">
+    <a href="../index.html" class="inline-flex items-center gap-2 text-sm text-muted hover:text-accent transition mb-8">
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Back to portfolio
+    </a>
+    <div class="text-xs font-mono uppercase tracking-widest text-accent mb-3">// case study · live in production</div>
+    <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight text-white">
+      Compressing container booking from <span class="text-accent">4 hours</span> to <span class="text-accent">10 minutes</span>
+    </h1>
+    <p class="mt-6 text-lg text-muted leading-relaxed max-w-3xl">
+      An end-to-end AI automation pipeline for an Indonesian commodity briquette exporter — parsing IPL templates, computing holiday-aware shipment dates, generating shipping documents, and submitting bookings to MSC, Maersk, ONE, Evergreen, and ZIM.
+    </p>
+    <div class="mt-8 flex flex-wrap items-center gap-3 text-xs font-mono">
+      <span class="px-2.5 py-1 rounded border border-line text-muted">Industry: Commodity Export</span>
+      <span class="px-2.5 py-1 rounded border border-line text-muted">Region: Indonesia → EU/Asia</span>
+      <span class="px-2.5 py-1 rounded border border-line text-muted">Status: Live</span>
+      <span class="px-2.5 py-1 rounded border border-line text-muted">Build time: 6 weeks (part-time)</span>
+    </div>
+  </div>
+</section>
+
+<section class="border-t border-line">
+  <div class="max-w-4xl mx-auto px-6 py-12">
+    <div class="grid md:grid-cols-4 gap-6 mb-12">
+      <div class="border-l-2 border-accent pl-4">
+        <div class="text-3xl font-bold text-white">4 hrs <span class="text-accent">→</span> 10 min</div>
+        <div class="text-xs uppercase tracking-widest text-muted mt-1">per container booking</div>
+      </div>
+      <div class="border-l-2 border-line pl-4">
+        <div class="text-3xl font-bold text-white">24x <span class="text-muted text-2xl">faster</span></div>
+        <div class="text-xs uppercase tracking-widest text-muted mt-1">turnaround time</div>
+      </div>
+      <div class="border-l-2 border-line pl-4">
+        <div class="text-3xl font-bold text-white">~20 <span class="text-muted text-2xl">hrs/wk</span></div>
+        <div class="text-xs uppercase tracking-widest text-muted mt-1">team time saved</div>
+      </div>
+      <div class="border-l-2 border-line pl-4">
+        <div class="text-3xl font-bold text-white">5 <span class="text-muted text-2xl">carriers</span></div>
+        <div class="text-xs uppercase tracking-widest text-muted mt-1">MSC, Maersk, ONE, Evergreen, ZIM</div>
+      </div>
+    </div>
+
+    <div class="prose-cs text-muted text-lg space-y-5 leading-relaxed">
+
+      <h2 class="!mt-0">The problem</h2>
+      <p>
+        For every container shipment, the export team was running the same flow by hand. Sales would drop an Instruction Packing List (IPL) — a Word or Excel template with order details. From there: parse the goods + buyer, compute the shipment date around Indonesian + destination-country holidays, generate Invoice / Packing List / B/L drafts, compose a routing-aware booking email to the right carrier, and submit the booking through that carrier's portal.
+      </p>
+      <p>
+        Four hours per container, multiple containers per week. And every step was fragile — a typo in dates, the wrong carrier picked, a missed holiday — would burn another half-day of back-and-forth.
+      </p>
+
+      <h2>The architecture</h2>
+      <p>The system is a Python pipeline orchestrating six stages:</p>
+      <pre><code>IPL (xlsx/docx) → Parser → Date Engine → Doc Generator → Email Composer → Carrier Submitter → Audit Log</code></pre>
+      <ul>
+        <li><strong class="text-white">Parser</strong> — reads IPL Excel/Word using <code>openpyxl</code> + <code>python-docx</code>. Uses a <code>prefer_below</code> lookup convention so it tolerates layout drift between Sales' templates.</li>
+        <li><strong class="text-white">Date engine</strong> — holiday-aware shipment math. Pulls Indonesian + destination-country holidays, applies cutoffs (CY closing date, ETD, ETA), and outputs a complete date set per booking.</li>
+        <li><strong class="text-white">Doc generator</strong> — fills Invoice, Packing List, COA, COO, B/L draft templates with merged fields. Uses <code>Win32 COM</code> for cases where Word formatting must round-trip exactly.</li>
+        <li><strong class="text-white">Email composer</strong> — Claude API drafts a routing-aware email per carrier, picks the right contact, and attaches the generated docs.</li>
+        <li><strong class="text-white">Carrier submitter</strong> — Playwright drives the booking portals (MSC instant-booking, Maersk MyFinance, ONE Quote, Evergreen Shipmentlink, ZIM Schedule). Headed mode for portals that need session continuity, headless for the rest.</li>
+        <li><strong class="text-white">Audit log</strong> — every step writes to SQLite, so any booking can be traced end-to-end if something goes wrong downstream.</li>
+      </ul>
+
+      <h2>The hard parts</h2>
+
+      <h3>1. Layout drift in IPLs</h3>
+      <p>
+        Sales templates aren't rigid. The "Buyer" cell could be at B5 in one file and C7 in another. I built a <code>prefer_below</code> resolver that anchors on label cells and walks down, with a regex fallback. It now parses ~98% of IPLs cleanly without manual intervention.
+      </p>
+
+      <h3>2. Holiday calendars per country pair</h3>
+      <p>
+        ETD (Estimated Time of Departure) for an Indonesia → Hamburg shipment via MSC isn't just "5 days after CY cutoff." It needs to account for the carrier's vessel schedule, plus public holidays at origin port (Tanjung Priok / Surabaya), transshipment hub (Singapore / Tanjung Pelepas), and destination port. The date engine carries a holiday table per port and adjusts for non-business days at every leg.
+      </p>
+
+      <h3>3. Routing-aware email composition</h3>
+      <p>
+        Different carriers have different intake formats. MSC wants a structured booking request; ONE wants a quote first; Evergreen takes a free-text email but parses it strictly. I use Claude with a system prompt that includes the routing rules as JSON, plus a few-shot example per carrier. Output gets validated against a schema before send.
+      </p>
+
+      <h3>4. Browser automation that actually survives</h3>
+      <p>
+        Carrier portals are notorious for breaking automation. I split into three reliability tiers — high (MSC, ONE: stable DOMs, work headless), medium (Maersk: needs cookie persistence, work headed in CI), unstable (Evergreen, ZIM: session timeouts, fall back to email submission with a Loom-recorded confirmation). The pipeline picks per carrier instead of failing the whole booking.
+      </p>
+
+      <h2>The stack</h2>
+      <ul>
+        <li><code>Python 3.11</code> as the orchestrator</li>
+        <li><code>openpyxl</code> + <code>python-docx</code> for spreadsheet/Word parsing</li>
+        <li><code>Win32 COM</code> for high-fidelity Word/Excel generation on Windows</li>
+        <li><code>Claude API</code> (Sonnet 4.6) for email composition + routing decisions</li>
+        <li><code>Playwright</code> for carrier portal automation</li>
+        <li><code>SQLite + FTS5</code> for the audit log + full-text search across past bookings</li>
+        <li><code>FastAPI</code> + a lightweight HTML dashboard for ops to monitor in-flight bookings</li>
+      </ul>
+
+      <h2>The result</h2>
+      <p>
+        The team books in ~10 minutes, end-to-end. They paste an IPL into the dashboard, review the auto-generated docs and the drafted email, click submit. The system handles parsing, dates, doc gen, carrier choice, submission, and confirmation logging.
+      </p>
+      <p>
+        Saved time compounds: ~20 hours/week now goes back to the team for higher-leverage work — relationship building with buyers, negotiating new carrier contracts, expanding to new destinations. That's the actual ROI, not just the booking speed.
+      </p>
+
+      <h2>What this proves I can do</h2>
+      <p>
+        This isn't a demo. It runs in production for a real exporter. If your team has a process that's:
+      </p>
+      <ul>
+        <li>Repeated by hand multiple times per day or week</li>
+        <li>Touches multiple systems (Excel + email + a vendor portal)</li>
+        <li>Has clear-but-fuzzy rules (holidays, routing, business logic)</li>
+      </ul>
+      <p>
+        Then it's almost certainly compressible the same way. I can usually scope it in a 30-min call and ship a working v1 in 2-4 weeks.
+      </p>
+
+    </div>
+  </div>
+</section>
+
+<section class="border-t border-line bg-gradient-to-b from-ink2 to-ink">
+  <div class="max-w-3xl mx-auto px-6 py-20 text-center">
+    <div class="text-xs font-mono uppercase tracking-widest text-accent mb-3">// next steps</div>
+    <h2 class="text-3xl md:text-4xl font-extrabold text-white">Have a similar process eating your team's hours?</h2>
+    <p class="mt-6 text-lg text-muted max-w-2xl mx-auto">
+      Send me what's eating the time — I'll send back a 1-page automation plan within 48 hours. Free, no obligation.
+    </p>
+    <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
+      <a href="mailto:gammawirawibowo@gmail.com" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-accent text-ink font-semibold hover:bg-accent2 transition">
+        gammawirawibowo@gmail.com
+      </a>
+      <a href="https://linkedin.com/in/gammawira" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-line text-slate-200 hover:border-accent hover:text-accent transition">
+        Message on LinkedIn
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer class="border-t border-line">
+  <div class="max-w-4xl mx-auto px-6 py-10 flex flex-wrap items-center justify-between gap-4 text-sm text-muted">
+    <div class="font-mono"><span class="text-accent">~/</span>gammawira — © 2026</div>
+    <div class="flex items-center gap-6">
+      <a href="https://github.com/Gamskie" target="_blank" rel="noopener" class="hover:text-accent transition">GitHub</a>
+      <a href="https://linkedin.com/in/gammawira" target="_blank" rel="noopener" class="hover:text-accent transition">LinkedIn</a>
+      <a href="mailto:gammawirawibowo@gmail.com" class="hover:text-accent transition">Email</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
