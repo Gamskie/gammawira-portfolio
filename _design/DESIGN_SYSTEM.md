@@ -1,47 +1,57 @@
-# Ember Design System v2
+# Slate Design System v3
 
 **Owner:** Gamma Wira Wibowo
-**Locked:** 19 Mei 2026 sore
+**Locked:** 19 Mei 2026 sore (v3 — replaces Ember v2)
 **Scope:** All pages under `gamskie.github.io/gammawira-portfolio/`
 
 This is the single source of truth for visual identity. If a token isn't here, it shouldn't ship.
 
 ---
 
+## Why v3 (and what changed from v2 Ember)
+
+**v2 problem:** Ember warm-cream + orange + serif read like "premium B2B/trade" — the same lane as pet-acc.com, Aesop, Patagonia, half of the warm-trade B2B internet. For an AI/automation specialist portfolio, that visual signal points at the wrong category. Gamma flagged this directly — "kurang kreatif."
+
+**v3 answer:** Engineered Editorial. Cool slate-graphite surfaces, porcelain off-white (cooler than warm cream), acid lime accent (not orange), Spectral display serif (sharper, more contemporary than Fraunces), and mono-prominent UI chrome (nav links, buttons, badges all JetBrains Mono in uppercase).
+
+The result reads as "engineering meets craft" rather than "retail trade." Distinct from pet-acc.com without abandoning the editorial discipline that makes the system work.
+
+---
+
 ## North star
 
-**Editorial Premium B2B.** Think Stripe, Linear, Vercel — generous whitespace, strong typographic hierarchy, restrained color, magazine-style rhythm. Confident without being corporate.
-
-The system stays warm because the brand is a 14-year manufacturer (PT PSN) shipping a natural commodity to importers in 14 countries. We're not a SaaS, we're not a startup pitch — we're a real operator who happens to ship clean docs and a clean website.
+**Engineered Editorial.** Cool, sharp, considered. Think Vercel × Spectral × an architect's drafting studio. Generous whitespace, strong typographic hierarchy, restrained color (one accent, used sparingly), mono UI chrome that signals engineering without resorting to terminal/code-bro cliches.
 
 ---
 
 ## Palette
 
-The product is **coconut charcoal**. The palette honors that.
+The product is **AI automation services** (engineering positioning) on the portfolio side. PSN Export is also rolled into the same system so all 4 pages share one identity — buyers/visitors who land on multiple pages get coherence.
 
 | Token | Hex | Use |
 |---|---|---|
-| `--ink` | `#1a1715` | Deep warm charcoal — dark surfaces, body text on cream |
-| `--smoke` | `#2a2522` | Elevated card on dark backgrounds |
-| `--paper` | `#faf7f0` | Warm ivory — primary cream surface |
-| `--paper-2` | `#f3ecdb` | Recessed cream — alternating sections |
-| `--paper-3` | `#ece2cc` | Deeper cream tint — emphasis blocks |
-| `--ember` | `#c8643a` | Warm ember orange — single accent for CTAs, eyebrows, links |
-| `--ember-deep` | `#a14d28` | Hover state |
-| `--ember-soft` | `#e9b48f` | Subtle ember tint on dark surfaces |
-| `--ember-tint` | `#f7e6d8` | Background wash for ember-marked pills |
-| `--ash` | `#5e564f` | Muted text on cream |
-| `--ash-soft` | `#8a8077` | Fine print on cream |
-| `--cream-muted` | `rgba(250,247,240,0.72)` | Muted text on dark |
-| `--line-cream` | `#e6dcc4` | Hairlines on cream |
-| `--line-dark` | `rgba(250,247,240,0.10)` | Hairlines on dark |
+| `--ink` | `#1c2429` | Deep cool slate-graphite — dark surfaces, body text on porcelain |
+| `--ink-elevated` | `#232c33` | Slightly raised dark surface |
+| `--smoke` | `#2a343b` | Card on dark backgrounds |
+| `--paper` | `#f5f3ee` | Porcelain — primary off-white surface (cooler than cream) |
+| `--paper-2` | `#ebe7df` | Recessed porcelain — alternating sections |
+| `--paper-3` | `#dfd9cd` | Deeper tint — emphasis blocks |
+| `--ember` | `#b3c80a` | Acid lime — single accent. *Token name kept for backwards compat with v2 CSS rules; semantic meaning is "primary accent."* |
+| `--ember-deep` | `#8fa008` | Hover state |
+| `--ember-soft` | `#d8ec78` | Soft lime on dark surfaces |
+| `--ember-tint` | `#eaf4b6` | Background wash for highlighted pills |
+| `--ash` | `#525866` | Cool muted text on porcelain |
+| `--ash-soft` | `#8e93a0` | Fine print on porcelain |
+| `--cream-muted` | `rgba(245,243,238,0.72)` | Muted text on dark |
+| `--line-cream` | `#ddd5c4` | Hairlines on porcelain |
+| `--line-dark` | `rgba(245,243,238,0.10)` | Hairlines on dark |
 
 **Rules:**
 
-- Ember is used SPARINGLY. One accent per screen-fold maximum.
-- Never combine `--ember` with cyan/teal/blue accents. Single accent system.
-- Status colors (ok/warn/danger) only inside data UI (badges, results) — never decoration.
+- Lime is used SPARINGLY. One accent per fold maximum. Eyebrows, link underlines, primary CTAs, status dots.
+- Never combine `--ember` (lime) with orange/red accents. Single-accent system.
+- Status colors (ok green, warn amber, danger red) only inside data UI — never decoration.
+- For the favicon and brand mark `.dot`, lime over slate gives the engineered look.
 
 ---
 
@@ -51,50 +61,42 @@ Three families. Each does one job.
 
 | Family | Role | Why |
 |---|---|---|
-| **Fraunces** | Display (hero, section heads, pull-quotes, stat values) | Variable serif with optical-size axis — editorial gravitas, distinctive without being precious |
-| **Inter** | UI (body, nav, buttons, labels) | The most legible neutral sans. Used everywhere except where Fraunces or mono is specified. |
-| **JetBrains Mono** | Mono (eyebrows, labels, code, fineprint) | Crisp ligatures, reads as "engineering" not "code-bro" |
+| **Spectral** | Display (hero, section heads, pull-quotes, stat values) | Sharper terminals than Fraunces, more contemporary feel, variable weight, free on Google Fonts. Reads as "design-considered" not "warm-storybook." |
+| **Inter** | Body, lead paragraphs, microcopy | Most legible neutral sans. |
+| **JetBrains Mono** | UI chrome (nav links, buttons, eyebrows, labels, pills, fineprint) | Promoted vs v2 — now drives the engineered feel through chrome typography, not just code blocks. |
 
 **Load order:**
 
 ```html
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 ```
 
-**Type scale (clamped for fluid response):**
+**Type scale (clamped, fluid):**
 
 | Class | Size | Line | Tracking | Use |
 |---|---|---|---|---|
-| `.t-hero` | clamp(48px, 7vw, 96px) | 1.0 | -0.03em | Hero h1 |
-| `.t-display` | clamp(36px, 5vw, 64px) | 1.05 | -0.025em | Major section h2 |
-| `.t-h2` | clamp(28px, 3.6vw, 44px) | 1.1 | -0.02em | Section h2 |
-| `.t-h3` | clamp(22px, 2.4vw, 28px) | 1.2 | -0.01em | Sub-section |
+| `.t-hero` | clamp(48px, 7vw, 96px) | 1.0 | -0.028em | Hero h1 |
+| `.t-display` | clamp(36px, 5vw, 64px) | 1.05 | -0.022em | Major section h2 |
+| `.t-h2` | clamp(28px, 3.6vw, 44px) | 1.1 | -0.018em | Section h2 |
+| `.t-h3` | clamp(22px, 2.4vw, 28px) | 1.2 | -0.012em | Sub-section |
 | `.t-h4` | 20px | 1.3 | -0.005em | Card title |
 | `.t-lead` | clamp(18px, 1.8vw, 22px) | 1.55 | — | Lead paragraph |
 | `.t-body` | 17px | 1.65 | — | Body |
 | `.t-small` | 14px | 1.55 | — | Tight body |
-| `.t-eyebrow` / `.eyebrow` | 11.5px | — | 0.18em (mono) | Section label |
+| `.eyebrow` | 11.5px | — | 0.18em (mono) | Section label with `┤` tick prefix |
+
+**Signature moves:**
+- Section eyebrows prefixed with mono `┤` tick character — engineering blueprint mark
+- Nav links uppercase mono, not lowercase serif
+- Buttons uppercase mono with sharp 4px radius (not full pill) — signals built-not-bought
 
 ---
 
 ## Spacing — 8pt grid
 
-| Token | px | Common use |
-|---|---|---|
-| `--s-1` | 4 | hairline gap |
-| `--s-2` | 8 | inline gap (icon ↔ text) |
-| `--s-3` | 12 | input padding |
-| `--s-4` | 16 | small stack gap |
-| `--s-5` | 24 | section internal |
-| `--s-6` | 32 | card padding |
-| `--s-7` | 48 | tight section |
-| `--s-8` | 64 | section vertical |
-| `--s-9` | 96 | major section vertical (default `.section`) |
-| `--s-10` | 128 | loose hero / showcase |
-
-**Default section padding = 96px top/bottom on desktop, 48px on mobile.**
+Same as v2. `--s-1` through `--s-10` mapping to 4px → 128px. Default section padding 96px desktop, 48px mobile.
 
 ---
 
@@ -102,78 +104,75 @@ Three families. Each does one job.
 
 ### Button
 
-| Variant | When |
+| Variant | Style |
 |---|---|
-| `.btn-primary` | Primary CTA (ember on whatever surface) |
-| `.btn-ghost-light` | Secondary on cream (ink outline) |
-| `.btn-ghost-dark` | Secondary on dark (cream outline) |
-| `.btn-solid-dark` | Secondary on cream that wants more weight |
+| `.btn-primary` | Lime fill, ink text, mono uppercase, 4px radius |
+| `.btn-ghost-light` | Transparent with ink border on porcelain |
+| `.btn-ghost-dark` | Transparent with hairline border on dark |
+| `.btn-solid-dark` | Ink fill, porcelain text |
 
-All buttons are pill-shaped (`--r-full`), 14px Inter 600, with a `.arrow` SVG that translates on hover.
+Buttons are sharp-edged (radius `--r-sm` = 4px), mono uppercase text. NOT pill-shaped — pill is too soft for the engineered signal.
 
-### Card
+### Card / site-card
 
-| Class | Surface |
-|---|---|
-| `.card` | Cream surface, hairline border, lift on hover |
-| `.card-flat` | Recessed cream (paper-2), no lift |
-| `.card-dark` | Smoke on ink, hairline white border |
-
-### Stat row
-
-Editorial stat strip — NO boxes, just two hairlines with vertical dividers between stats. Uses Fraunces 40px for the value, mono uppercase 11px for the label. Replaces the old "border-left bar" stat bricks.
+- `.card` — porcelain surface, hairline border, lift on hover
+- `.card-dark` — smoke on ink for nested cards
+- `.card-flat` — paper-2 recessed, no lift
+- `.site-card` — full website preview card with 16:10 thumbnail + status badge + meta block + arrow-link footer
 
 ### Pill
 
-`.pill` — tiny tag with mono text, hairline border, pill radius. Used for chips, certs, country tags.
-
-`.pill-ember` — ember-tinted variant for emphasis (e.g. "New").
+Sharp-radius mono badges. `.pill-ember` for accent variant (lime tint background).
 
 ### Nav
 
-`.nav` (cream blur) or `.nav-dark` (ink blur). Sticky, 64px tall, hairline bottom border. Brand mark uses Fraunces with an ember `.dot`.
+`.nav` (porcelain blur) or `.nav-dark` (ink blur). 64px tall, hairline bottom. Brand mark uses Spectral with lime `.dot`.
 
 ### Pull-quote
 
-`.pullquote` — Fraunces italic with WONK + SOFT axes engaged. Hairline rules top + bottom. Used for testimonials, key reframings, manifesto lines.
+`.pullquote` — Spectral italic, hairline rules top + bottom. Used for testimonials, manifesto lines.
+
+### Dot grid (signature hero motif)
+
+`.dot-grid` — adds an engineered blueprint dot pattern (24px spacing, 1px dots, 10% opacity) behind hero content. Masked with vertical fade so it fades into the section below. Replaces v2's `.paper-grain` for hero use.
 
 ---
 
-## Page surface patterns
+## Surface patterns
 
-**Don't apply colors directly.** Use the surface helpers:
+Don't hand-set colors. Use:
 
-- `.surface-ink` — ink background, cream text, ember accent
-- `.surface-paper` — paper background, ink text, ember accent
-- `.surface-paper-2` — recessed paper (alternating sections)
+- `.surface-ink` — ink background, porcelain text
+- `.surface-paper` — porcelain background, ink text
+- `.surface-paper-2` — recessed porcelain
 
-The system flips card / pill / button / stat styles based on surface context. You compose pages by alternating surfaces, not by repeatedly setting colors.
+The system flips internal colors based on surface context.
 
-**Typical page rhythm:**
+**Typical rhythm:**
 
 ```
 [nav]
-[hero          surface-ink]
-[problem       surface-paper]
-[solution      surface-paper-2]
-[proof         surface-ink]
-[pricing       surface-paper]
-[faq           surface-paper-2]
-[contact       surface-ink]
-[footer        surface-ink]
+[hero          paper + dot-grid]
+[work / problem  ink]
+[solution        paper]
+[sites           paper]
+[stack           paper-2]
+[about           paper]
+[contact         ink]
+[footer          ink]
 ```
 
 ---
 
-## Voice — quick rules for copy
+## Voice — quick rules
 
-(Brand voice docs cover this in detail. Reminders only.)
+(Brand voice docs cover detail; reminders only.)
 
 - Lowercase Bahasa Indonesia opener if writing to ID audience
-- First-person ("I build…" / "Saya bangun…") not third-person corporate
+- First-person ("I build…" / "Saya bangun…")
 - Specifics > superlatives: "12.5 ton/day capacity" beats "high capacity"
-- Never "industry-leading", "best-in-class", "world-class"
-- Em-dash usage = restrained. One per paragraph max.
+- Never "industry-leading," "best-in-class," "world-class"
+- Em-dash restraint. One per paragraph max.
 
 ---
 
@@ -181,19 +180,29 @@ The system flips card / pill / button / stat styles based on surface context. Yo
 
 The system is intentionally NOT:
 
-- ❌ Glow effects / neon / cyber — feels 2020-template dev portfolio
-- ❌ Multiple radial gradients on hero backgrounds
-- ❌ Drop-shadowed cards everywhere (use hairlines)
-- ❌ Aurora / mesh gradient hero backdrops
-- ❌ Tailwind default palette (slate-200, blue-600, etc.)
+- ❌ Warm cream + orange (v2 — too pet-acc adjacent)
+- ❌ Glow effects / neon / cyber (2020 dev portfolio vibe)
+- ❌ Multiple radial gradients on hero
+- ❌ Drop-shadowed cards everywhere (hairlines instead)
+- ❌ Aurora / mesh gradient backgrounds
+- ❌ Tailwind default palette
 - ❌ Emoji decoration in headlines
-- ❌ "AI shimmer" / animated gradients on CTAs
+- ❌ Pill-shaped CTAs (too soft for engineered signal — use 4px radius)
+- ❌ `~/gammawira` terminal mono brandmark (looks like a thousand other dev portfolios)
 
 ---
 
 ## Inspiration anchors
 
-When stuck, look at: **Stripe.com** (rhythm), **Linear.app** (precision), **Vercel.com** (clarity), **Aesop.com** (editorial heritage product), **Patagonia.com** (warm trade brand), **The Verge** (display-serif headlines).
+When stuck, look at: **Vercel** (precision), **Replit** (lime accent done tastefully), **Linear** (typographic discipline), **Stripe** (rhythm), **Spectral specimen pages** (display serif treatment), **architecture firm websites** (asymmetric editorial layouts).
+
+---
+
+## Version history
+
+- **v3 (current, 19 Mei 2026 sore)** — Engineered Editorial · Slate + Porcelain + Acid Lime · Spectral · mono UI chrome
+- **v2 (19 Mei 2026 sore-earlier)** — Ember · Warm Charcoal + Cream + Orange · Fraunces · pill CTAs *(deprecated — too warm-trade adjacent to pet-acc.com)*
+- **v1 (pre-19 Mei)** — Tailwind dark mode + cyan accent · tech-portfolio template
 
 ---
 
