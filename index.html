@@ -1,261 +1,429 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gamma Wira — AI Lead &amp; Revenue Automation for Service Businesses</title>
-<meta name="description" content="I build AI systems that stop businesses from losing leads — capture every inquiry, draft replies in minutes, follow up automatically until close. Python + Claude API + n8n. Building in public from Bandung." />
-<meta name="theme-color" content="#0b1120" />
-<meta property="og:title" content="Gamma Wira — AI Lead &amp; Revenue Automation" />
-<meta property="og:description" content="I build AI systems that stop businesses from losing leads. Python + Claude API + n8n. Building in public from Bandung." />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://gamskie.github.io/gammawira-portfolio/" />
-<meta property="og:image" content="https://gamskie.github.io/gammawira-portfolio/og.png" />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Gamma Wira — AI Lead &amp; Revenue Automation" />
-<meta name="twitter:description" content="I build AI systems that stop businesses from losing leads. Python + Claude API + n8n. Building in public from Bandung." />
-<meta name="twitter:image" content="https://gamskie.github.io/gammawira-portfolio/og.png" />
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2334d3dc'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='18' font-weight='bold' text-anchor='middle' fill='%230b1120'%3EG%3C/text%3E%3C/svg%3E" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          ink: '#0b1120',
-          ink2: '#10172a',
-          accent: '#34d3dc',
-          accent2: '#6cdbe0',
-          muted: '#a8c3d7',
-          line: '#1c2740',
-        },
-        fontFamily: {
-          sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-          mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
-        },
-      },
-    },
-  };
-</script>
+<meta name="description" content="I build AI systems that stop service businesses from losing leads — capture every inquiry, draft replies in minutes, follow up automatically until close. Python + Claude API + n8n. Building in public from Bandung.">
+<meta name="theme-color" content="#1a1715">
+<meta property="og:title" content="Gamma Wira — AI Lead &amp; Revenue Automation">
+<meta property="og:description" content="I build AI systems that stop businesses from losing leads. Python + Claude API + n8n. Building in public from Bandung.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://gamskie.github.io/gammawira-portfolio/">
+<meta property="og:image" content="https://gamskie.github.io/gammawira-portfolio/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Gamma Wira — AI Lead &amp; Revenue Automation">
+<meta name="twitter:description" content="I build AI systems that stop businesses from losing leads.">
+<meta name="twitter:image" content="https://gamskie.github.io/gammawira-portfolio/og.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231a1715'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='20' font-weight='400' text-anchor='middle' fill='%23c8643a'%3EG%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/system.css">
 <style>
-  html { scroll-behavior: smooth; }
-  body { background: radial-gradient(1200px 600px at 90% -10%, rgba(52,211,220,0.10), transparent 60%), radial-gradient(900px 600px at -10% 110%, rgba(52,211,220,0.06), transparent 60%), #0b1120; }
-  .glow { box-shadow: 0 0 0 1px rgba(52,211,220,0.25), 0 20px 60px -20px rgba(52,211,220,0.25); }
-  .grid-bg { background-image: linear-gradient(rgba(52,211,220,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(52,211,220,0.06) 1px, transparent 1px); background-size: 48px 48px; }
-  @keyframes pulse-dot { 0%,100%{transform:scale(1);opacity:.7} 50%{transform:scale(1.4);opacity:1} }
-  .pulse-dot::before { content:''; position:absolute; inset:0; border-radius:9999px; background:#34d3dc; animation:pulse-dot 2s ease-in-out infinite; }
+  /* Page-local helpers */
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 28px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+
+  /* Hero */
+  .hero { padding: 128px 0 80px; }
+  @media (max-width: 720px) { .hero { padding: 80px 0 56px; } }
+
+  /* Project card refined */
+  .project {
+    padding: 36px;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--r-lg);
+    background: var(--ink-elevated);
+    position: relative;
+    transition: all 280ms var(--ease-out);
+    display: flex;
+    flex-direction: column;
+    min-height: 380px;
+  }
+  .project:hover {
+    border-color: var(--ember-soft);
+    transform: translateY(-2px);
+    box-shadow: 0 30px 60px -30px rgba(0,0,0,0.5);
+  }
+  .project-num {
+    position: absolute;
+    top: 32px;
+    right: 32px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--cream-soft);
+  }
+  .project-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--ember-soft);
+    margin-bottom: 16px;
+  }
+  .project-title {
+    font-family: var(--font-display);
+    font-size: 26px;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    color: var(--cream-text);
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  .project-body {
+    color: var(--cream-muted);
+    font-size: 15.5px;
+    line-height: 1.65;
+    flex: 1;
+  }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--cream-muted);
+    padding: 4px 10px;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--r-full);
+  }
+  .project-foot {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line-strong);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    font-family: var(--font-mono);
+  }
+  .project-foot .lead { color: var(--ember-soft); font-weight: 500; }
+  .project-foot .meta { color: var(--cream-soft); }
+  .project-cta {
+    margin-top: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ember-soft);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    align-self: flex-start;
+    transition: all 180ms var(--ease-out);
+  }
+  .project-cta:hover {
+    border-bottom-color: var(--ember-soft);
+    transform: translateX(2px);
+  }
+
+  /* Stack list */
+  .stack-card {
+    padding: 32px;
+    border: 1px solid var(--line-cream);
+    border-radius: var(--r-md);
+    background: var(--paper);
+  }
+  .stack-card-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--ember);
+    margin-bottom: 16px;
+  }
+  .stack-card h3 {
+    font-family: var(--font-display);
+    font-size: 22px;
+    letter-spacing: -0.015em;
+    font-weight: 500;
+    margin: 0 0 16px;
+    color: var(--ink-text);
+  }
+  .stack-list { list-style: none; padding: 0; margin: 0; }
+  .stack-list li {
+    padding: 10px 0;
+    font-size: 15px;
+    color: var(--ash);
+    border-bottom: 1px solid var(--line-cream);
+  }
+  .stack-list li:last-child { border-bottom: none; }
+  .stack-list strong { color: var(--ink-text); font-weight: 600; }
+
+  /* About */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: 96px;
+  }
+  @media (max-width: 920px) { .about-grid { grid-template-columns: 1fr; gap: 48px; } }
+  .about-prose p {
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--ash);
+    margin: 0 0 24px;
+  }
+  .about-prose p:last-child { margin-bottom: 0; }
+  .about-prose strong { color: var(--ink-text); font-weight: 600; }
+
+  /* CTA row helpers */
+  .cta-row { display: flex; flex-wrap: wrap; gap: 12px; }
+
+  /* Status dot */
+  .status-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--ember);
+    margin-right: 8px;
+    vertical-align: middle;
+    position: relative;
+  }
+  .status-dot::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    background: var(--ember);
+    opacity: 0.3;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { transform: scale(1); opacity: 0.3; }
+    50% { transform: scale(1.6); opacity: 0; }
+  }
 </style>
 </head>
-<body class="font-sans text-slate-200 antialiased">
+<body class="surface-paper">
 
 <!-- NAV -->
-<header class="sticky top-0 z-40 backdrop-blur bg-ink/60 border-b border-line">
-  <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-    <a href="#top" class="font-mono text-sm font-bold tracking-tight">
-      <span class="text-accent">~/</span><span>gammawira</span>
-    </a>
-    <div class="hidden md:flex items-center gap-8 text-sm text-muted">
-      <a href="#work" class="hover:text-accent transition">Work</a>
-      <a href="#stack" class="hover:text-accent transition">Stack</a>
-      <a href="#about" class="hover:text-accent transition">About</a>
-      <a href="#contact" class="hover:text-accent transition">Contact</a>
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="#top" class="brand-mark">Gamma Wira<span class="dot">.</span></a>
+    <div class="nav-links">
+      <a class="nav-link" href="#work">Work</a>
+      <a class="nav-link" href="#stack">Stack</a>
+      <a class="nav-link" href="#about">About</a>
+      <a class="nav-link" href="#contact">Contact</a>
     </div>
-    <a href="#contact" class="text-sm font-medium px-4 py-2 rounded-full bg-accent text-ink hover:bg-accent2 transition">
-      Hire me →
+    <a class="btn btn-primary" href="#contact">
+      Hire me
+      <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
     </a>
-  </nav>
-</header>
+  </div>
+</nav>
 
 <!-- HERO -->
-<section id="top" class="relative overflow-hidden">
-  <div class="absolute inset-0 grid-bg opacity-50 pointer-events-none"></div>
-  <div class="max-w-6xl mx-auto px-6 pt-24 pb-20 relative">
-    <div class="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-accent">
-      <span class="relative w-2 h-2 rounded-full bg-accent pulse-dot"></span>
-      <span>Halo · open to remote work</span>
+<header id="top" class="hero">
+  <div class="container">
+    <div class="eyebrow" style="margin-bottom: 32px;">
+      <span class="status-dot"></span>Halo · open to remote work
     </div>
-    <h1 class="mt-6 text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.05]">
-      I build the <span class="text-accent">systems</span> that stop businesses from losing leads.
+
+    <h1 class="display t-hero" style="max-width: 18ch; color: var(--ink-text);">
+      I build the <em class="display-italic" style="color: var(--ember);">systems</em> that stop businesses from losing leads.
     </h1>
-    <p class="mt-8 max-w-2xl text-lg md:text-xl text-muted leading-relaxed">
-      I'm <span class="text-white font-semibold">Gamma</span>. Every week, businesses lose customers who were already interested — an inquiry that got answered too slowly, a lead nobody followed up on. I build the system that closes that gap: every inquiry captured in one place, an AI-drafted reply within minutes, follow-up that runs on its own until the deal closes. I came up building production automation in-house at an Indonesian exporter — I know operational pain from the inside.
+
+    <p class="t-lead" style="color: var(--ash); margin-top: 40px; max-width: 60ch;">
+      I'm <strong style="color: var(--ink-text); font-weight: 600;">Gamma</strong>. Every week, businesses lose customers who were already interested — an inquiry that got answered too slowly, a lead that nobody followed up on. I build the system that closes that gap: every inquiry captured in one place, an AI-drafted reply within minutes, follow-up that runs on its own until the deal closes. I came up building production automation in-house at an Indonesian exporter, so I know operational pain from the inside.
     </p>
-    <div class="mt-10 flex flex-wrap items-center gap-4">
-      <a href="#contact" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-accent text-ink font-semibold hover:bg-accent2 transition glow">
+
+    <div class="cta-row" style="margin-top: 40px;">
+      <a class="btn btn-primary" href="#contact">
         Start a project
-        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
-      <a href="https://github.com/Gamskie" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-line text-slate-200 hover:border-accent hover:text-accent transition">
-        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a12 12 0 0 0-3.79 23.4c.6.11.82-.26.82-.58v-2.05c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.85 1.24 1.85 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.31-.54-1.55.12-3.22 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.67.25 2.91.12 3.22.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.7.83.58A12 12 0 0 0 12 .5"/></svg>
+      <a class="btn btn-ghost-light" href="https://github.com/Gamskie" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a12 12 0 0 0-3.79 23.4c.6.11.82-.26.82-.58v-2.05c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.85 1.24 1.85 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.31-.54-1.55.12-3.22 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.67.25 2.91.12 3.22.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.7.83.58A12 12 0 0 0 12 .5"/></svg>
         GitHub
       </a>
-      <a href="https://linkedin.com/in/gammawira" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-line text-slate-200 hover:border-accent hover:text-accent transition">
-        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.27a1.75 1.75 0 1 1 0-3.5 1.75 1.75 0 0 1 0 3.5zm13.5 12.27h-3v-5.6c0-1.34-.03-3.07-1.87-3.07-1.87 0-2.16 1.46-2.16 2.97v5.7h-3v-11h2.88v1.5h.04c.4-.76 1.38-1.56 2.84-1.56 3.04 0 3.6 2 3.6 4.6v6.46z"/></svg>
+      <a class="btn btn-ghost-light" href="https://linkedin.com/in/gammawira" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.27a1.75 1.75 0 1 1 0-3.5 1.75 1.75 0 0 1 0 3.5zm13.5 12.27h-3v-5.6c0-1.34-.03-3.07-1.87-3.07-1.87 0-2.16 1.46-2.16 2.97v5.7h-3v-11h2.88v1.5h.04c.4-.76 1.38-1.56 2.84-1.56 3.04 0 3.6 2 3.6 4.6v6.46z"/></svg>
         LinkedIn
       </a>
     </div>
 
     <!-- Quick facts strip -->
-    <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6">
-      <div class="border-l-2 border-accent pl-4">
-        <div class="text-3xl font-bold text-white">Bandung <span class="text-accent text-base">ID</span></div>
-        <div class="text-xs uppercase tracking-widest text-muted mt-1">based in · UTC+7</div>
+    <div class="stat-row" style="margin-top: 80px;">
+      <div class="stat">
+        <div class="stat-value">Bandung</div>
+        <div class="stat-label">Based in · UTC+7</div>
       </div>
-      <div class="border-l-2 border-line pl-4">
-        <div class="text-3xl font-bold text-white">5+ <span class="text-muted text-2xl">yrs</span></div>
-        <div class="text-xs uppercase tracking-widest text-muted mt-1">writing software</div>
+      <div class="stat">
+        <div class="stat-value">5+ <span style="font-size: 22px; color: var(--ash);">yrs</span></div>
+        <div class="stat-label">Writing software</div>
       </div>
-      <div class="border-l-2 border-line pl-4">
-        <div class="text-3xl font-bold text-white">3.56<span class="text-muted text-2xl">/4.0</span></div>
-        <div class="text-xs uppercase tracking-widest text-muted mt-1">cumlaude · informatics</div>
+      <div class="stat">
+        <div class="stat-value">3.56<span style="font-size: 22px; color: var(--ash);">/4.0</span></div>
+        <div class="stat-label">Cumlaude · informatics</div>
       </div>
-      <div class="border-l-2 border-line pl-4">
-        <div class="text-3xl font-bold text-white">Open <span class="text-muted text-2xl">to work</span></div>
-        <div class="text-xs uppercase tracking-widest text-muted mt-1">remote · part or full</div>
+      <div class="stat">
+        <div class="stat-value">Open</div>
+        <div class="stat-label">Remote · part or full</div>
       </div>
+    </div>
+  </div>
+</header>
+
+<!-- WORK -->
+<section id="work" class="surface-ink section">
+  <div class="container">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 64px; margin-bottom: 64px; align-items: end;">
+      <div>
+        <div class="eyebrow" style="margin-bottom: 20px; color: var(--ember-soft);">Work</div>
+        <h2 class="display t-display" style="color: var(--cream-text);">
+          Real projects.<br>Different stages of done.
+        </h2>
+      </div>
+      <p class="t-body" style="color: var(--cream-muted);">
+        The shipment pipeline below is the proof I can ship production automation — it runs daily at my day job. The rest is open-source starter code and the workspace I build from. An honest mix, not a portfolio where every line claims to have shipped for a client.
+      </p>
+    </div>
+
+    <div class="grid-2">
+
+      <!-- 01 MSC Pipeline -->
+      <article class="project">
+        <div class="project-num">01</div>
+        <div class="project-eyebrow">In active use · MSC carrier</div>
+        <h3 class="project-title">MSC shipment doc &amp; booking pipeline</h3>
+        <p class="project-body">
+          A Telegram-triggered Python pipeline I built for my own export-ops work at an Indonesian commodity briquette exporter. It parses the IPL Excel from Sales, computes Indonesian-holiday-aware Packing / Cooling / Production dates, fills 5 Word templates, converts them to PDF via Word/Excel COM, and drafts the booking email per destination region. Tested on real MSC bookings; the team still submits to MyMSC manually for now.
+        </p>
+        <div class="tag-row">
+          <span class="tag">Python</span>
+          <span class="tag">openpyxl</span>
+          <span class="tag">python-docx</span>
+          <span class="tag">Word/Excel COM</span>
+          <span class="tag">OpenClaw + Telegram</span>
+        </div>
+        <div class="project-foot">
+          <span class="lead">Replaces manual entry across 5 docs / booking</span>
+          <span class="meta">submit + DG next</span>
+        </div>
+        <a class="project-cta" href="case-study/shipment-booking.html">
+          Read the build notes
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </article>
+
+      <!-- 02 AI toolkit -->
+      <article class="project">
+        <div class="project-num">02</div>
+        <div class="project-eyebrow">Open source · lead-rescue building blocks</div>
+        <h3 class="project-title">AI automation toolkit (Python + Claude)</h3>
+        <p class="project-body">
+          Open-source starter code for the building blocks of a lead-rescue system: web research on a prospect, a Claude-API draft-reply generator, and reply classification on inbound messages. These are the same patterns I assemble into a full AI Lead Rescue System for clients. Public so you can see how I think — MIT licensed.
+        </p>
+        <div class="tag-row">
+          <span class="tag">Python</span>
+          <span class="tag">Claude API</span>
+          <span class="tag">Firecrawl</span>
+          <span class="tag">n8n</span>
+        </div>
+        <div class="project-foot">
+          <span class="lead">github.com/Gamskie/ai-automation-toolkit</span>
+          <span class="meta">MIT</span>
+        </div>
+      </article>
+
+      <!-- 03 AI workspace -->
+      <article class="project">
+        <div class="project-num">03</div>
+        <div class="project-eyebrow">Personal infrastructure</div>
+        <h3 class="project-title">My self-hosted AI workspace</h3>
+        <p class="project-body">
+          OpenClaw + claude-mem on my own Windows machine, with persistent memory in SQLite + FTS5, multi-model routing via OpenRouter, and a workspace-folder convention for keeping projects isolated. Not a product — the setup I use every day. The shipment pipeline above runs through it.
+        </p>
+        <div class="tag-row">
+          <span class="tag">OpenClaw</span>
+          <span class="tag">claude-mem</span>
+          <span class="tag">OpenRouter</span>
+          <span class="tag">SQLite + FTS5</span>
+        </div>
+        <div class="project-foot">
+          <span class="lead">Always-on, on my own hardware</span>
+          <span class="meta">no vendor lock-in</span>
+        </div>
+      </article>
+
+      <!-- 04 KAI -->
+      <article class="project">
+        <div class="project-num">04</div>
+        <div class="project-eyebrow">Internship · 2023</div>
+        <h3 class="project-title">Warehouse management system</h3>
+        <p class="project-body">
+          Web-based inventory system built during my internship at PT Kereta Api Indonesia (Persero), Daop 4 Semarang. Full-stack PHP + MySQL with CRUD operations, relational schema design, and end-to-end testing for data accuracy.
+        </p>
+        <div class="tag-row">
+          <span class="tag">PHP</span>
+          <span class="tag">MySQL</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">HTML/CSS</span>
+        </div>
+        <div class="project-foot">
+          <span class="lead">PT KAI internship</span>
+          <span class="meta">Sep – Dec 2023</span>
+        </div>
+      </article>
+
     </div>
   </div>
 </section>
 
-<!-- WORK -->
-<section id="work" class="border-t border-line">
-  <div class="max-w-6xl mx-auto px-6 py-24">
-    <div class="flex items-end justify-between flex-wrap gap-4 mb-12">
-      <div>
-        <div class="text-xs font-mono uppercase tracking-widest text-accent mb-3">// what I'm working on</div>
-        <h2 class="text-3xl md:text-4xl font-bold text-white">Real projects, in different stages of done.</h2>
-      </div>
-      <div class="text-sm text-muted max-w-md">
-        The shipment pipeline below is the proof I can ship production automation — it runs daily at my day job. The rest is open-source starter code and the workspace I build from. Honest mix, not a pretend portfolio where everything is shipped for clients.
-      </div>
-    </div>
-
-    <div class="grid md:grid-cols-2 gap-6">
-      <!-- Project 1: MSC Shipment Pipeline -->
-      <article class="group p-8 rounded-2xl border border-line bg-ink2 hover:border-accent transition relative overflow-hidden">
-        <div class="absolute top-6 right-6 text-xs font-mono text-muted">01</div>
-        <div class="text-xs font-mono uppercase tracking-widest text-accent mb-4">in active use · MSC carrier</div>
-        <h3 class="text-2xl font-bold text-white">MSC shipment doc &amp; booking pipeline</h3>
-        <p class="mt-3 text-muted leading-relaxed">
-          A Telegram-triggered Python pipeline I built for my own export-ops work at an Indonesian commodity briquette exporter. It parses the IPL Excel from Sales, computes Indonesian-holiday-aware Packing/Cooling/Production dates, fills 5 Word templates (SI, Weathering, Process Statement, LOI, Intermodal), converts them to PDF via Word/Excel COM, and drafts the booking email per destination region. Tested on real MSC bookings; the team still submits to MyMSC manually for now.
-        </p>
-        <div class="mt-6 flex flex-wrap gap-2 text-xs font-mono">
-          <span class="px-2.5 py-1 rounded border border-line text-muted">Python</span>
-          <span class="px-2.5 py-1 rounded border border-line text-muted">openpyxl</span>
-          <span class="px-2.5 py-1 rounded border border-line text-muted">python-docx</span>
-          <span class="px-2.5 py-1 rounded border border-line text-muted">Word/Excel COM</span>
-          <span class="px-2.5 py-1 rounded border border-line text-muted">OpenClaw + Telegram</span>
-        </div>
-        <div class="mt-6 pt-6 border-t border-line flex items-center justify-between text-sm">
-          <span class="text-accent font-semibold">Replaces manual entry across 5 docs / booking</span>
-          <span class="text-muted">MyMSC submit + DG form coming next</span>
-        </div>
-        <a href="case-study/shipment-booking.html" class="mt-4 inline-flex items-center gap-2 text-sm font-mono text-accent hover:text-accent2 transition">
-          Read the build notes
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-      </article>
-
-      <!-- Project 2: AI outreach starter -->
-      <article class="group p-8 rounded-2xl border border-line bg-ink2 hover:border-accent transition relative overflow-hidden">
-        <div class="absolute top-6 right-6 text-xs font-mono text-muted">02</div>
-        <div class="text-xs font-mono uppercase tracking-widest text-accent mb-4">open source · lead-rescue building blocks</div>
-        <h3 class="text-2xl font-bold text-white">AI automation toolkit (Python + Claude)</h3>
-        <p class="mt-3 text-muted leading-relaxed">
-          Open-source starter code for the building blocks of a lead-rescue system: web research on a prospect, a Claude-API draft-reply generator, and reply classification on inbound messages. These are the same patterns I assemble into a full AI Lead Rescue System for clients. Public so you can see how I think — MIT licensed.
-        </p>
-        <div class="mt-6 flex flex-wrap gap-2 text-xs font-mono">
-          <span class="px-2.5 py-1 rounded border border-line text-muted">Python</span>
-          <span class="px-2.5 py-1 rounded border border-line text-muted">Claude API</span>
-          <span class="px-2.5 py-1 rounded border border-line text-muted">Firecrawl</span>
-          <span class="px-2.5 py-1 rounded border border-line text-muted">n8n</span>
-        </div>
-        <div class="mt-6 pt-6 border-t border-line flex items-center justify-between text-sm">
-          <span class="text-accent font-semibold">github.com/Gamskie/ai-automation-toolkit</span>
-          <span class="text-muted">starter, MIT</span>
-        </div>
-      </article>
-
-      <!-- Project 3: Personal AI workspace -->
-      <article class="group p-8 rounded-2xl border border-line bg-ink2 hover:border-accent transition relative overflow-hidden">
-        <div class="absolute top-6 right-6 text-xs font-mono text-muted">03</div>
-        <div class="text-xs font-mono uppercase tracking-widest text-accent mb-4">personal infrastructure</div>
-        <h3 class="text-2xl font-bold text-white">My self-hosted AI workspace</h3>
-        <p class="mt-3 text-muted leading-relaxed">
-          OpenClaw + claude-mem on my own Windows machine, with persistent memory in SQLite + FTS5, multi-model routing via OpenRouter, and a workspace-folder convention for keeping projects isolated. Not a product — just the setup I use every day. The shipment pipeline above is triggered through it.
-        </p>
-        <div class="mt-6 flex flex-wrap gap-2 text-xs font-mono">
-          <span class="px-2.5 py-1 rounded border border-line text-muted">OpenClaw</span>
-          <span class="px-2.5 py-1 rounded border border-line text-muted">claude-mem</span>
-          <span class="px-2.5 py-1 rounded border border-line text-muted">OpenRouter</span>
-          <span class="px-2.5 py-1 rounded border border-line text-muted">SQLite</span>
-        </div>
-        <div class="mt-6 pt-6 border-t border-line flex items-center justify-between text-sm">
-          <span class="text-accent font-semibold">Always-on, runs on my own hardware</span>
-          <span class="text-muted">no vendor lock-in</span>
-        </div>
-      </article>
-
-      <!-- Project 4: Warehouse System -->
-      <article class="group p-8 rounded-2xl border border-line bg-ink2 hover:border-accent transition relative overflow-hidden">
-        <div class="absolute top-6 right-6 text-xs font-mono text-muted">04</div>
-        <div class="text-xs font-mono uppercase tracking-widest text-accent mb-4">internship · 2023</div>
-        <h3 class="text-2xl font-bold text-white">Warehouse Management System</h3>
-        <p class="mt-3 text-muted leading-relaxed">
-          Web-based inventory system built during my internship at PT Kereta Api Indonesia (Persero), Daop 4 Semarang. Full-stack PHP + MySQL with CRUD operations, relational schema design, and end-to-end testing for data accuracy.
-        </p>
-        <div class="mt-6 flex flex-wrap gap-2 text-xs font-mono">
-          <span class="px-2.5 py-1 rounded border border-line text-muted">PHP</span>
-          <span class="px-2.5 py-1 rounded border border-line text-muted">MySQL</span>
-          <span class="px-2.5 py-1 rounded border border-line text-muted">JavaScript</span>
-          <span class="px-2.5 py-1 rounded border border-line text-muted">HTML/CSS</span>
-        </div>
-        <div class="mt-6 pt-6 border-t border-line flex items-center justify-between text-sm">
-          <span class="text-accent font-semibold">PT KAI internship</span>
-          <span class="text-muted">Sep — Dec 2023</span>
-        </div>
-      </article>
-    </div>
+<!-- PULL QUOTE -->
+<section class="surface-paper-2 section-tight">
+  <div class="container-narrow" style="text-align: center;">
+    <p class="pullquote" style="border-color: var(--ember);">
+      The expensive problem for most businesses isn't slow paperwork. It's the customer who was ready to buy, lost somewhere between "they messaged us" and "nobody got back to them."
+    </p>
+    <p class="fineprint" style="margin-top: 18px; text-transform: uppercase;">— Working principle</p>
   </div>
 </section>
 
 <!-- STACK -->
-<section id="stack" class="border-t border-line bg-ink2/40">
-  <div class="max-w-6xl mx-auto px-6 py-24">
-    <div class="text-xs font-mono uppercase tracking-widest text-accent mb-3">// the stack</div>
-    <h2 class="text-3xl md:text-4xl font-bold text-white max-w-2xl">Tools I work with — some daily, some still learning.</h2>
+<section id="stack" class="section">
+  <div class="container">
+    <div style="max-width: 720px; margin-bottom: 56px;">
+      <div class="eyebrow" style="margin-bottom: 20px;">The stack</div>
+      <h2 class="display t-display">Tools I work with — some daily, some still learning.</h2>
+    </div>
 
-    <div class="mt-12 grid md:grid-cols-3 gap-6">
-      <div class="p-6 rounded-2xl border border-line">
-        <div class="text-accent font-mono text-xs uppercase tracking-widest mb-3">AI / LLM</div>
-        <ul class="space-y-2 text-slate-200">
-          <li>Claude API (Sonnet, Opus, Haiku)</li>
-          <li>OpenAI · OpenRouter (multi-model routing)</li>
-          <li>LangChain · LangGraph</li>
-          <li>Mastra (TypeScript agent framework)</li>
+    <div class="grid-3">
+      <div class="stack-card">
+        <div class="stack-card-eyebrow">AI &middot; LLM</div>
+        <h3>Models &amp; agents</h3>
+        <ul class="stack-list">
+          <li><strong>Claude API</strong> &mdash; Sonnet, Opus, Haiku</li>
+          <li>OpenAI &middot; OpenRouter multi-model routing</li>
+          <li>LangChain &middot; LangGraph</li>
+          <li>Mastra (TS agent framework)</li>
         </ul>
       </div>
-      <div class="p-6 rounded-2xl border border-line">
-        <div class="text-accent font-mono text-xs uppercase tracking-widest mb-3">Automation</div>
-        <ul class="space-y-2 text-slate-200">
-          <li>n8n (self-hosted)</li>
-          <li>Make · Zapier</li>
-          <li>Custom Python/TypeScript orchestrators</li>
-          <li>Firecrawl · Apify · Playwright + Stagehand</li>
+
+      <div class="stack-card">
+        <div class="stack-card-eyebrow">Automation</div>
+        <h3>Orchestration &amp; scraping</h3>
+        <ul class="stack-list">
+          <li><strong>n8n</strong> &mdash; self-hosted</li>
+          <li>Make &middot; Zapier</li>
+          <li>Custom Python &amp; TypeScript orchestrators</li>
+          <li>Firecrawl &middot; Apify &middot; Playwright + Stagehand</li>
         </ul>
       </div>
-      <div class="p-6 rounded-2xl border border-line">
-        <div class="text-accent font-mono text-xs uppercase tracking-widest mb-3">Infra & Data</div>
-        <ul class="space-y-2 text-slate-200">
-          <li>Supabase · PostgreSQL</li>
-          <li>Cloudflare Workers · Vercel</li>
-          <li>Qdrant · pgvector (RAG)</li>
-          <li>Cloudflare R2 · Box · GDrive</li>
+
+      <div class="stack-card">
+        <div class="stack-card-eyebrow">Infra &amp; Data</div>
+        <h3>Where things live</h3>
+        <ul class="stack-list">
+          <li><strong>Supabase</strong> &middot; PostgreSQL</li>
+          <li>Cloudflare Workers &middot; Vercel</li>
+          <li>Qdrant &middot; pgvector for RAG</li>
+          <li>Cloudflare R2 &middot; Box &middot; GDrive</li>
         </ul>
       </div>
     </div>
@@ -263,64 +431,69 @@
 </section>
 
 <!-- ABOUT -->
-<section id="about" class="border-t border-line">
-  <div class="max-w-6xl mx-auto px-6 py-24 grid md:grid-cols-3 gap-12">
-    <div class="md:col-span-1">
-      <div class="text-xs font-mono uppercase tracking-widest text-accent mb-3">// about</div>
-      <h2 class="text-3xl md:text-4xl font-bold text-white">I started by automating my own job. Then I found the bigger problem.</h2>
-    </div>
-    <div class="md:col-span-2 space-y-6 text-muted leading-relaxed text-lg">
-      <p>
-        My day job is Marketing &amp; Export Administration at an Indonesian commodity exporter. Doing the same manual workflow every week is what got me writing Python on the side — first a pipeline that builds shipment documents end-to-end, now in daily use.
-      </p>
-      <p>
-        But the pipeline that taught me the most wasn't about documents. It was a small system that catches buyer inquiries before they slip through — and that's when it clicked. The expensive problem for most businesses isn't slow paperwork. It's the customer who was ready to buy, lost somewhere between "they messaged us" and "nobody got back to them." That leak doesn't show up in any report. The money just quietly disappears.
-      </p>
-      <p>
-        So that's what I build now: AI Lead Rescue Systems for service businesses — agencies, consultants, contractors, clinics, studios. Capture every inquiry, draft a reply in minutes, follow up until it closes. Stack is plain — Python, Claude API, n8n — because it has to actually work, not just demo well.
-      </p>
-      <p class="text-slate-200">
-        Bachelor's in Informatics Engineering (Cumlaude, 3.56/4.00) from Universitas Dian Nuswantoro. Internship at PT Kereta Api Indonesia (Daop 4 Semarang) building a warehouse management system. Based in Bandung. Remote everywhere.
-      </p>
+<section id="about" class="surface-paper-2 section">
+  <div class="container">
+    <div class="about-grid">
+      <div>
+        <div class="eyebrow" style="margin-bottom: 20px;">About</div>
+        <h2 class="display t-display">
+          I started by <em class="display-italic" style="color: var(--ember);">automating</em> my own job.<br>
+          Then I found the bigger problem.
+        </h2>
+      </div>
+      <div class="about-prose">
+        <p>
+          My day job is Marketing &amp; Export Operations at an Indonesian commodity exporter. Doing the same manual workflow every week is what got me writing Python on the side — first a pipeline that builds shipment documents end-to-end, now in daily use.
+        </p>
+        <p>
+          But the pipeline that taught me the most wasn't about documents. It was a small system that catches buyer inquiries before they slip through — and that's when it clicked. The expensive problem for most businesses isn't slow paperwork. It's the customer who was ready to buy, lost somewhere between "they messaged us" and "nobody got back to them." That leak doesn't show up in any report. The money just quietly disappears.
+        </p>
+        <p>
+          So that's what I build now: <strong>AI Lead Rescue Systems</strong> for service businesses — agencies, consultants, contractors, clinics, studios. Capture every inquiry, draft a reply in minutes, follow up until it closes. Stack is plain — Python, Claude API, n8n — because it has to actually work, not just demo well.
+        </p>
+        <p>
+          Bachelor's in Informatics Engineering, Cumlaude 3.56/4.00, from Universitas Dian Nuswantoro. Internship at PT Kereta Api Indonesia (Daop 4 Semarang) building a warehouse management system. Based in Bandung. Remote everywhere.
+        </p>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- CONTACT -->
-<section id="contact" class="border-t border-line bg-gradient-to-b from-ink2 to-ink">
-  <div class="max-w-4xl mx-auto px-6 py-24 text-center">
-    <div class="text-xs font-mono uppercase tracking-widest text-accent mb-3">// let's talk</div>
-    <h2 class="text-4xl md:text-5xl font-extrabold text-white">
-      How many leads is your team quietly losing every week?
+<section id="contact" class="surface-ink section">
+  <div class="container-narrow" style="text-align: center;">
+    <div class="eyebrow" style="justify-content: center; color: var(--ember-soft); margin-bottom: 24px;">Let's talk</div>
+    <h2 class="display t-display" style="color: var(--cream-text);">
+      How many leads is your team<br>quietly losing every week?
     </h2>
-    <p class="mt-6 text-xl text-muted max-w-2xl mx-auto">
+    <p class="t-lead" style="color: var(--cream-muted); margin: 32px auto 0; max-width: 56ch;">
       Tell me how inquiries reach your business — WhatsApp, email, DM, web form — and where they tend to go cold. I'll write back honestly with what I'd build, what I wouldn't, and a price. No 48-hour countdown, no playbook PDF, just a real reply.
     </p>
-    <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
-      <a href="mailto:gammawirawibowo@gmail.com" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-accent text-ink font-semibold hover:bg-accent2 transition glow">
-        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4h16v16H4zM4 4l8 8 8-8"/></svg>
+    <div class="cta-row" style="justify-content: center; margin-top: 40px;">
+      <a class="btn btn-primary" href="mailto:gammawirawibowo@gmail.com">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4zM4 4l8 8 8-8"/></svg>
         gammawirawibowo@gmail.com
       </a>
-      <a href="https://linkedin.com/in/gammawira" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-line text-slate-200 hover:border-accent hover:text-accent transition">
+      <a class="btn btn-ghost-dark" href="https://linkedin.com/in/gammawira" target="_blank" rel="noopener">
         Message on LinkedIn
       </a>
     </div>
-    <div class="mt-12 text-sm font-mono text-muted">
-      <span class="text-accent">$</span> available globally · UTC+7 · usually replies within a day
-    </div>
+    <p class="fineprint" style="margin-top: 56px; color: var(--cream-soft);">
+      Available globally &middot; UTC+7 &middot; usually replies within a day
+    </p>
   </div>
 </section>
 
 <!-- FOOTER -->
-<footer class="border-t border-line">
-  <div class="max-w-6xl mx-auto px-6 py-10 flex flex-wrap items-center justify-between gap-4 text-sm text-muted">
-    <div class="font-mono">
-      <span class="text-accent">~/</span>gammawira — © 2026
+<footer class="surface-ink section-rule-top" style="padding: 32px 0;">
+  <div class="container" style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+    <div class="fineprint">
+      Gamma Wira Wibowo &mdash; © 2026
     </div>
-    <div class="flex items-center gap-6">
-      <a href="https://github.com/Gamskie" target="_blank" rel="noopener" class="hover:text-accent transition">GitHub</a>
-      <a href="https://linkedin.com/in/gammawira" target="_blank" rel="noopener" class="hover:text-accent transition">LinkedIn</a>
-      <a href="mailto:gammawirawibowo@gmail.com" class="hover:text-accent transition">Email</a>
+    <div style="display: flex; gap: 24px;">
+      <a class="fineprint" style="color: var(--ember-soft); text-decoration: none;" href="https://github.com/Gamskie" target="_blank" rel="noopener">GitHub</a>
+      <a class="fineprint" style="color: var(--ember-soft); text-decoration: none;" href="https://linkedin.com/in/gammawira" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="fineprint" style="color: var(--ember-soft); text-decoration: none;" href="mailto:gammawirawibowo@gmail.com">Email</a>
     </div>
   </div>
 </footer>

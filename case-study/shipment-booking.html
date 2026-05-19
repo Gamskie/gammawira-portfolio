@@ -1,103 +1,212 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Build notes: MSC shipment doc &amp; booking pipeline · Gamma Wira</title>
-<meta name="description" content="Honest build notes on the Telegram-triggered Python pipeline I made for my own export-ops work — what's wired up, what's still manual, and the trade-offs along the way." />
-<meta name="theme-color" content="#0b1120" />
-<meta property="og:title" content="Build notes: MSC shipment doc & booking pipeline" />
-<meta property="og:description" content="A small Python pipeline I run from Telegram for my own export work. What's done, what's still manual, what I'd change." />
-<meta property="og:image" content="https://gamskie.github.io/gammawira-portfolio/og.png" />
-<meta property="og:type" content="article" />
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2334d3dc'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='18' font-weight='bold' text-anchor='middle' fill='%230b1120'%3EG%3C/text%3E%3C/svg%3E" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          ink: '#0b1120', ink2: '#10172a',
-          accent: '#34d3dc', accent2: '#6cdbe0',
-          muted: '#a8c3d7', line: '#1c2740',
-        },
-        fontFamily: {
-          sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-          mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
-        },
-      },
-    },
-  };
-</script>
+<meta name="description" content="Honest build notes on the Telegram-triggered Python pipeline I made for my own export-ops work — what's wired up, what's still manual, and the trade-offs along the way.">
+<meta name="theme-color" content="#1a1715">
+<meta property="og:title" content="Build notes: MSC shipment doc &amp; booking pipeline">
+<meta property="og:description" content="A small Python pipeline I run from Telegram for my own export work. What's done, what's still manual, what I'd change.">
+<meta property="og:image" content="https://gamskie.github.io/gammawira-portfolio/og.png">
+<meta property="og:type" content="article">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231a1715'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='20' font-weight='400' text-anchor='middle' fill='%23c8643a'%3EG%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/system.css">
 <style>
-  html { scroll-behavior: smooth; }
-  body { background: radial-gradient(1200px 600px at 90% -10%, rgba(52,211,220,0.10), transparent 60%), radial-gradient(900px 600px at -10% 110%, rgba(52,211,220,0.06), transparent 60%), #0b1120; }
-  .grid-bg { background-image: linear-gradient(rgba(52,211,220,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(52,211,220,0.06) 1px, transparent 1px); background-size: 48px 48px; }
-  .notes p { line-height: 1.7; }
-  .notes h2 { font-size: 1.625rem; font-weight: 700; color: white; margin-top: 2.5rem; margin-bottom: 0.75rem; }
-  .notes h3 { font-size: 1.125rem; font-weight: 600; color: white; margin-top: 1.75rem; margin-bottom: 0.5rem; }
-  .notes ul { list-style: disc; padding-left: 1.5rem; }
-  .notes li { margin-bottom: 0.4rem; }
-  .notes code { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; background: rgba(52,211,220,0.08); padding: 0.125rem 0.375rem; border-radius: 4px; color: #6cdbe0; }
-  .notes pre { background: #10172a; border: 1px solid #1c2740; border-radius: 12px; padding: 1.25rem; overflow-x: auto; font-size: 0.85rem; line-height: 1.6; }
-  .notes pre code { background: transparent; padding: 0; color: #a8c3d7; }
+  /* Article reading layout */
+  .article-hero { padding: 80px 0 56px; }
+  .article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 28px;
+  }
+  .article-meta .tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 6px 12px;
+    border: 1px solid var(--line-cream);
+    color: var(--ash);
+    border-radius: var(--r-full);
+    letter-spacing: 0.04em;
+  }
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ash);
+    text-decoration: none;
+    margin-bottom: 32px;
+  }
+  .back-link:hover { color: var(--ember); }
+
+  /* Prose */
+  .prose {
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--ink-text);
+    max-width: 680px;
+    margin: 0 auto;
+  }
+  .prose > * { max-width: 100%; }
+  .prose h2 {
+    font-family: var(--font-display);
+    font-size: 30px;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+    color: var(--ink-text);
+    margin: 56px 0 16px;
+  }
+  .prose h2:first-child { margin-top: 0; }
+  .prose h3 {
+    font-family: var(--font-display);
+    font-size: 22px;
+    line-height: 1.3;
+    letter-spacing: -0.015em;
+    font-weight: 500;
+    color: var(--ink-text);
+    margin: 36px 0 12px;
+  }
+  .prose p { margin: 0 0 20px; color: var(--ash); }
+  .prose strong { color: var(--ink-text); font-weight: 600; }
+  .prose ul { padding-left: 20px; margin: 0 0 24px; }
+  .prose ul li {
+    padding-left: 8px;
+    margin-bottom: 12px;
+    color: var(--ash);
+  }
+  .prose ul li::marker {
+    color: var(--ember);
+    font-family: var(--font-mono);
+  }
+  .prose ul li strong { color: var(--ink-text); }
+  .prose code {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    background: var(--paper-2);
+    border: 1px solid var(--line-cream);
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: var(--ember-deep);
+  }
+  .prose pre {
+    background: var(--ink);
+    color: var(--cream-text);
+    border-radius: var(--r-md);
+    padding: 24px 28px;
+    overflow-x: auto;
+    margin: 28px 0;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    line-height: 1.6;
+    border: 1px solid var(--line-strong);
+  }
+  .prose pre code {
+    background: transparent;
+    border: none;
+    color: var(--cream-text);
+    padding: 0;
+  }
+
+  /* Drop cap */
+  .prose > p:first-of-type::first-letter {
+    font-family: var(--font-display);
+    font-size: 60px;
+    line-height: 1;
+    float: left;
+    padding: 6px 12px 0 0;
+    color: var(--ember);
+    font-weight: 500;
+  }
+
+  /* Mini CTA */
+  .miniCta {
+    padding: 56px 40px;
+    background: var(--ink);
+    color: var(--cream-text);
+    border-radius: var(--r-lg);
+    text-align: center;
+    margin: 56px auto 0;
+    max-width: 680px;
+  }
+  .miniCta h2 {
+    color: var(--cream-text) !important;
+    margin: 0 0 12px !important;
+    font-family: var(--font-display);
+    font-size: 28px;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    font-weight: 500;
+  }
+  .miniCta p {
+    color: var(--cream-muted);
+    margin: 0 0 24px;
+    font-size: 16px;
+  }
+  .cta-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
 </style>
 </head>
-<body class="font-sans text-slate-200 antialiased">
+<body class="surface-paper">
 
-<header class="sticky top-0 z-40 backdrop-blur bg-ink/60 border-b border-line">
-  <nav class="max-w-3xl mx-auto px-6 h-16 flex items-center justify-between">
-    <a href="../index.html" class="font-mono text-sm font-bold tracking-tight">
-      <span class="text-accent">~/</span><span>gammawira</span>
-    </a>
-    <div class="hidden md:flex items-center gap-8 text-sm text-muted">
-      <a href="../index.html#work" class="hover:text-accent transition">Work</a>
-      <a href="../index.html#stack" class="hover:text-accent transition">Stack</a>
-      <a href="../index.html#about" class="hover:text-accent transition">About</a>
-      <a href="../index.html#contact" class="hover:text-accent transition">Contact</a>
+<!-- NAV -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="../index.html" class="brand-mark">Gamma Wira<span class="dot">.</span></a>
+    <div class="nav-links">
+      <a class="nav-link" href="../index.html#work">Work</a>
+      <a class="nav-link" href="../index.html#stack">Stack</a>
+      <a class="nav-link" href="../index.html#about">About</a>
+      <a class="nav-link" href="../index.html#contact">Contact</a>
     </div>
-    <a href="../index.html#contact" class="text-sm font-medium px-4 py-2 rounded-full bg-accent text-ink hover:bg-accent2 transition">Hire me →</a>
-  </nav>
-</header>
+    <a class="btn btn-primary" href="../index.html#contact">
+      Hire me
+      <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+</nav>
 
-<section class="relative overflow-hidden">
-  <div class="absolute inset-0 grid-bg opacity-50 pointer-events-none"></div>
-  <div class="max-w-3xl mx-auto px-6 pt-16 pb-10 relative">
-    <a href="../index.html" class="inline-flex items-center gap-2 text-sm text-muted hover:text-accent transition mb-8">
-      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+<!-- HEADER -->
+<header class="article-hero">
+  <div class="container-prose">
+    <a href="../index.html" class="back-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
       Back to portfolio
     </a>
-    <div class="text-xs font-mono uppercase tracking-widest text-accent mb-3">// build notes · partial pipeline</div>
-    <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-tight text-white">
-      MSC shipment doc &amp; booking pipeline
+    <div class="eyebrow" style="margin-bottom: 20px;">Build notes · Partial pipeline</div>
+    <h1 class="display t-display" style="line-height: 1.05;">
+      MSC shipment doc &amp; booking pipeline.
     </h1>
-    <p class="mt-5 text-base text-muted leading-relaxed">
+    <p class="t-lead" style="color: var(--ash); margin-top: 24px;">
       A small Python pipeline I built for my own export-ops work at an Indonesian commodity briquette exporter. This page is a quick honest tour of what's wired up, what's still manual, and the trade-offs.
     </p>
-    <div class="mt-6 flex flex-wrap items-center gap-3 text-xs font-mono">
-      <span class="px-2.5 py-1 rounded border border-line text-muted">scope: one carrier (MSC)</span>
-      <span class="px-2.5 py-1 rounded border border-line text-muted">tested on real bookings: TR2601, CTMD6</span>
-      <span class="px-2.5 py-1 rounded border border-line text-muted">submit step: still manual</span>
+    <div class="article-meta">
+      <span class="tag">Scope · one carrier (MSC)</span>
+      <span class="tag">Tested on · TR2601, CTMD6</span>
+      <span class="tag">Submit step · still manual</span>
     </div>
   </div>
-</section>
+</header>
 
-<section class="border-t border-line">
-  <div class="max-w-3xl mx-auto px-6 py-10 notes text-muted">
+<!-- BODY -->
+<section class="section-rule-top" style="padding-top: 56px; padding-bottom: 56px;">
+  <div class="container-prose">
+    <div class="prose">
+      <h2>The problem I had</h2>
+      <p>
+        Booking a container shipment at the day job took the same handful of steps every time. Sales would drop the IPL (Instruction Packing List) Excel into a folder. From there I'd compute Packing / Cooling / Production dates around Indonesian holidays, fill out five Word documents (SI, Weathering Report, Process Statement, LOI, Intermodal Booking Form), convert them to PDF, draft the booking email to the right MSC region contact, and submit through MyMSC. Once the booking went through, I'd paste the booking number back into the IPL.
+      </p>
+      <p>
+        None of those steps were hard. They were just tedious, easy to mistype, and added up to an afternoon I didn't enjoy.
+      </p>
 
-    <h2 class="!mt-0">The problem I had</h2>
-    <p>
-      Booking a container shipment at the day job took the same handful of steps every time. Sales would drop the IPL (Instruction Packing List) Excel into a folder. From there I'd compute Packing / Cooling / Production dates around Indonesian holidays, fill out five Word documents (SI, Weathering Report, Process Statement, LOI, Intermodal Booking Form), convert them to PDF, draft the booking email to the right MSC region contact, and submit through MyMSC. Once the booking went through, I'd paste the booking number back into the IPL.
-    </p>
-    <p>
-      None of those steps were hard. They were just tedious, easy to mistype, and added up to an afternoon I didn't enjoy.
-    </p>
-
-    <h2>The pipeline, end to end</h2>
-    <pre><code>Telegram (OpenClaw bot)
+      <h2>The pipeline, end to end</h2>
+      <pre><code>Telegram (OpenClaw bot)
   ↓
 build_shipment_data.py    ← orchestrator
   ↓ produces shipment_data.json
@@ -107,71 +216,66 @@ build_shipment_data.py    ← orchestrator
   ├─→ save_ipl_pdf.ps1        IPL Excel → PDF (Excel COM)
   └─→ compose_email.py        drafts TO/CC/Subject/Body</code></pre>
 
-    <h3>What's actually wired up</h3>
-    <ul>
-      <li><strong class="text-white">IPL parser</strong> — reads the active invoice sheet, pulls consignee, POD, container, weights, cartons, invoice number, product type. Tolerates a couple of common sheet-name variants.</li>
-      <li><strong class="text-white">Date engine</strong> — Indonesian-public-holiday-aware. Given a stuffing date and product type, it shifts back to give Packing / Cooling / Production windows. Supports a <code>shift_days</code> offset for multi-booking weeks.</li>
-      <li><strong class="text-white">Doc generator</strong> — fills five Word templates by find-and-replace. PowerShell + Word COM converts to PDF for round-trip fidelity.</li>
-      <li><strong class="text-white">Email draft composer</strong> — picks the right MSC region contact (POD keyword first, then code prefix as fallback) and renders subject / body from a JSON config. <em>This part is template-based, not LLM-generated.</em></li>
-      <li><strong class="text-white">IPL booking writer</strong> — pastes the booking number into the right cell across all the relevant sheets, with a <code>.bak</code> backup.</li>
-    </ul>
+      <h3>What's actually wired up</h3>
+      <ul>
+        <li><strong>IPL parser</strong> — reads the active invoice sheet, pulls consignee, POD, container, weights, cartons, invoice number, product type. Tolerates a couple of common sheet-name variants.</li>
+        <li><strong>Date engine</strong> — Indonesian-public-holiday-aware. Given a stuffing date and product type, it shifts back to give Packing / Cooling / Production windows. Supports a <code>shift_days</code> offset for multi-booking weeks.</li>
+        <li><strong>Doc generator</strong> — fills five Word templates by find-and-replace. PowerShell + Word COM converts to PDF for round-trip fidelity.</li>
+        <li><strong>Email draft composer</strong> — picks the right MSC region contact (POD keyword first, then code prefix as fallback) and renders subject / body from a JSON config. <em>This part is template-based, not LLM-generated.</em></li>
+        <li><strong>IPL booking writer</strong> — pastes the booking number into the right cell across all the relevant sheets, with a <code>.bak</code> backup.</li>
+      </ul>
 
-    <h3>What's still manual</h3>
-    <ul>
-      <li><strong class="text-white">Submitting to MyMSC</strong>. Once the docs and email draft are ready, I still log into the portal and submit by hand. Playwright automation for MyMSC is on the to-do list.</li>
-      <li><strong class="text-white">DG (Dangerous Goods) form handling</strong>. Old <code>.doc</code> format that needs a LibreOffice convert step I haven't wired in yet.</li>
-      <li><strong class="text-white">A few template auto-detections</strong> that currently rely on the previous booking's filled values being available — fine in steady state, fragile when the template changes.</li>
-    </ul>
+      <h3>What's still manual</h3>
+      <ul>
+        <li><strong>Submitting to MyMSC.</strong> Once the docs and email draft are ready, I still log into the portal and submit by hand. Playwright automation for MyMSC is on the to-do list.</li>
+        <li><strong>DG (Dangerous Goods) form handling.</strong> Old <code>.doc</code> format that needs a LibreOffice convert step I haven't wired in yet.</li>
+        <li><strong>A few template auto-detections</strong> that currently rely on the previous booking's filled values being available — fine in steady state, fragile when the template changes.</li>
+      </ul>
 
-    <h2>Trade-offs along the way</h2>
+      <h2>Trade-offs along the way</h2>
 
-    <h3>Template fill vs. LLM-generated email</h3>
-    <p>
-      I started writing the email composer as a Claude prompt. Then I noticed the email is the same five lines every time, just with different dates and POD. A JSON config with region routing solved it deterministically, with zero API cost and no risk of an LLM nudging field values around. There's a version of this pipeline where Claude does the email — it just isn't this one.
-    </p>
+      <h3>Template fill vs. LLM-generated email</h3>
+      <p>
+        I started writing the email composer as a Claude prompt. Then I noticed the email is the same five lines every time, just with different dates and POD. A JSON config with region routing solved it deterministically, with zero API cost and no risk of an LLM nudging field values around. There's a version of this pipeline where Claude does the email — it just isn't this one.
+      </p>
 
-    <h3>Word COM on Windows vs. cross-platform PDF</h3>
-    <p>
-      The team needs the rendered PDF to look exactly like the existing Word templates — same fonts, same spacing, same logo placement. <code>python-docx</code> alone wasn't enough; I drove Word and Excel through PowerShell + COM to round-trip perfectly. That ties the pipeline to my Windows machine, which is fine for now.
-    </p>
+      <h3>Word COM on Windows vs. cross-platform PDF</h3>
+      <p>
+        The team needs the rendered PDF to look exactly like the existing Word templates — same fonts, same spacing, same logo placement. <code>python-docx</code> alone wasn't enough; I drove Word and Excel through PowerShell + COM to round-trip perfectly. That ties the pipeline to my Windows machine, which is fine for now.
+      </p>
 
-    <h3>Tested on two shipments, not a hundred</h3>
-    <p>
-      The pipeline produces correct outputs on TR2601 (Istanbul, EU region) and CTMD6 (Rotterdam, EU region). I haven't run it across the full 2026 history yet. If you're a prospect reading this and wondering whether I'd over-claim a number — I'd rather show you the two real test cases than invent a "20+ hours/week saved" headline.
-    </p>
+      <h3>Tested on two shipments, not a hundred</h3>
+      <p>
+        The pipeline produces correct outputs on TR2601 (Istanbul, EU region) and CTMD6 (Rotterdam, EU region). I haven't run it across the full 2026 history yet. If you're a prospect reading this and wondering whether I'd over-claim a number — I'd rather show you the two real test cases than invent a "20+ hours/week saved" headline.
+      </p>
 
-    <h2>What I'd do for someone else</h2>
-    <p>
-      The pattern is general: parse a templated input, do the deterministic data work, fill outbound documents, draft the outbound communication, leave the irreversible action (the actual portal submit, the actual email send) for a human to confirm. If your team has a workflow that fits — Excel + email + a vendor portal, repeated weekly — I can usually scope something similar in a 30-minute call.
-    </p>
+      <h2>What I'd do for someone else</h2>
+      <p>
+        The pattern is general: parse a templated input, do the deterministic data work, fill outbound documents, draft the outbound communication, leave the irreversible action (the actual portal submit, the actual email send) for a human to confirm. If your team has a workflow that fits — Excel + email + a vendor portal, repeated weekly — I can usually scope something similar in a 30-minute call.
+      </p>
+    </div>
 
-  </div>
-</section>
-
-<section class="border-t border-line bg-gradient-to-b from-ink2 to-ink">
-  <div class="max-w-2xl mx-auto px-6 py-16 text-center">
-    <h2 class="text-2xl md:text-3xl font-extrabold text-white">Have a similar workflow?</h2>
-    <p class="mt-4 text-muted max-w-xl mx-auto">
-      Tell me what's eating the time. I'll write back honestly about what I'd build, what I wouldn't, and a price.
-    </p>
-    <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
-      <a href="mailto:gammawirawibowo@gmail.com" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-accent text-ink font-semibold hover:bg-accent2 transition">
-        gammawirawibowo@gmail.com
-      </a>
-      <a href="https://linkedin.com/in/gammawira" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-line text-slate-200 hover:border-accent hover:text-accent transition">
-        Message on LinkedIn
-      </a>
+    <div class="miniCta">
+      <h2>Have a similar workflow?</h2>
+      <p>Tell me what's eating the time. I'll write back honestly about what I'd build, what I wouldn't, and a price.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="mailto:gammawirawibowo@gmail.com">gammawirawibowo@gmail.com</a>
+        <a class="btn btn-ghost-dark" href="https://linkedin.com/in/gammawira" target="_blank" rel="noopener">Message on LinkedIn</a>
+      </div>
     </div>
   </div>
 </section>
 
-<footer class="border-t border-line">
-  <div class="max-w-3xl mx-auto px-6 py-10 flex flex-wrap items-center justify-between gap-4 text-sm text-muted">
-    <div class="font-mono"><span class="text-accent">~/</span>gammawira — © 2026</div>
-    <div class="flex items-center gap-6">
-      <a href="https://github.com/Gamskie" target="_blank" rel="noopener" class="hover:text-accent transition">GitHub</a>
-      <a href="https://linkedin.com/in/gammawira" target="_blank" rel="noopener" class="hover:text-accent transition">LinkedIn</a>
-      <a href="mailto:gammawirawibowo@gmail.com" class="hover:text-accent transition">Email</a>
+<!-- FOOTER -->
+<footer class="section-rule-top" style="padding: 32px 0;">
+  <div class="container" style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+    <div class="fineprint">
+      Gamma Wira Wibowo &mdash; © 2026
+    </div>
+    <div style="display: flex; gap: 24px;">
+      <a class="fineprint" style="color: var(--ember); text-decoration: none;" href="https://github.com/Gamskie" target="_blank" rel="noopener">GitHub</a>
+      <a class="fineprint" style="color: var(--ember); text-decoration: none;" href="https://linkedin.com/in/gammawira" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="fineprint" style="color: var(--ember); text-decoration: none;" href="mailto:gammawirawibowo@gmail.com">Email</a>
     </div>
   </div>
 </footer>

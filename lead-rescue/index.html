@@ -1,338 +1,611 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Lead Rescue System — Berhenti kehilangan calon customer | Gamma Wira</title>
-<meta name="description" content="Sistem AI yang nangkep setiap inquiry, balas dalam menit, follow-up sampai closing. Untuk bisnis jasa Indonesia: agency, konsultan, kontraktor, klinik, studio. Rp 47-125jt fixed price." />
-<meta name="theme-color" content="#0b1120" />
-<meta property="og:title" content="AI Lead Rescue System — Berhenti kehilangan calon customer" />
-<meta property="og:description" content="Sistem AI yang nutup kebocoran lead di bisnis jasa. Capture · Respond · Follow-up. 30 hari, fixed price." />
-<meta property="og:type" content="website" />
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2334d3dc'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='18' font-weight='bold' text-anchor='middle' fill='%230b1120'%3EG%3C/text%3E%3C/svg%3E" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          ink: '#0b1120',
-          ink2: '#10172a',
-          accent: '#34d3dc',
-          accent2: '#6cdbe0',
-          muted: '#a8c3d7',
-          line: '#1c2740',
-          danger: '#f87171',
-          ok: '#4ade80',
-        },
-        fontFamily: {
-          sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-          mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
-        },
-      },
-    },
-  };
-</script>
+<meta name="description" content="Sistem AI yang nangkep setiap inquiry, balas dalam menit, follow-up sampai closing. Untuk bisnis jasa Indonesia: agency, konsultan, kontraktor, klinik, studio. Rp 47-125jt fixed price.">
+<meta name="theme-color" content="#1a1715">
+<meta property="og:title" content="AI Lead Rescue System — Berhenti kehilangan calon customer">
+<meta property="og:description" content="Sistem AI yang nutup kebocoran lead di bisnis jasa. Capture · Respond · Follow-up. 30 hari, fixed price.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231a1715'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='20' font-weight='400' text-anchor='middle' fill='%23c8643a'%3EL%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/system.css">
 <style>
-  html { scroll-behavior: smooth; }
-  body {
-    background:
-      radial-gradient(1200px 600px at 90% -10%, rgba(52,211,220,0.10), transparent 60%),
-      radial-gradient(900px 600px at -10% 110%, rgba(52,211,220,0.06), transparent 60%),
-      #0b1120;
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+
+  .hero { padding: 120px 0 80px; }
+  @media (max-width: 720px) { .hero { padding: 72px 0 56px; } }
+
+  /* Leak cards — paper-light, danger tint border-left */
+  .leak {
+    padding: 32px;
+    border-radius: var(--r-md);
+    border: 1px solid var(--line-cream);
+    background: var(--paper);
+    position: relative;
   }
-  .glow { box-shadow: 0 0 0 1px rgba(52,211,220,0.25), 0 20px 60px -20px rgba(52,211,220,0.25); }
-  .grid-bg { background-image: linear-gradient(rgba(52,211,220,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(52,211,220,0.06) 1px, transparent 1px); background-size: 48px 48px; }
-  @keyframes pulse-dot { 0%,100%{transform:scale(1);opacity:.7} 50%{transform:scale(1.4);opacity:1} }
-  .pulse-dot::before { content:''; position:absolute; inset:0; border-radius:9999px; background:#34d3dc; animation:pulse-dot 2s ease-in-out infinite; }
-  details > summary { list-style: none; cursor: pointer; }
-  details > summary::-webkit-details-marker { display: none; }
-  details[open] .chev { transform: rotate(180deg); }
-  .chev { transition: transform .2s; }
+  .leak::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 24px;
+    bottom: 24px;
+    width: 2px;
+    background: var(--danger);
+    border-radius: 1px;
+  }
+  .leak-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--danger);
+    margin-bottom: 12px;
+  }
+
+  /* Component step card on ink */
+  .step-card {
+    background: var(--ink-elevated);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--r-md);
+    padding: 36px;
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+  @media (max-width: 720px) { .step-card { grid-template-columns: 1fr; gap: 16px; padding: 28px; } }
+  .step-card-num {
+    font-family: var(--font-display);
+    font-size: 64px;
+    line-height: 1;
+    color: var(--ember);
+    font-weight: 400;
+  }
+  .step-card-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--ember-soft);
+    margin-bottom: 8px;
+  }
+
+  /* Get-what cards */
+  .deliverable {
+    display: flex;
+    gap: 16px;
+    padding: 22px 24px;
+    border: 1px solid var(--line-cream);
+    border-radius: var(--r-md);
+    background: var(--paper);
+  }
+  .check-circle {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--ember-tint);
+    color: var(--ember-deep);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+  }
+
+  /* Pricing cards */
+  .price-card {
+    padding: 36px;
+    border-radius: var(--r-md);
+    border: 1px solid var(--line-cream);
+    background: var(--paper);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .price-card.featured {
+    background: var(--ink);
+    color: var(--cream-text);
+    border-color: var(--ember);
+    box-shadow: 0 30px 60px -30px rgba(200,100,58,0.4);
+  }
+  .price-card.featured h3,
+  .price-card.featured .price-value { color: var(--cream-text); }
+  .price-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--ash);
+    margin-bottom: 12px;
+  }
+  .price-card.featured .price-eyebrow { color: var(--ember-soft); }
+  .price-tag-featured {
+    position: absolute;
+    top: -12px;
+    left: 32px;
+    padding: 4px 14px;
+    background: var(--ember);
+    color: var(--paper);
+    border-radius: var(--r-full);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-weight: 600;
+  }
+  .price-value {
+    font-family: var(--font-display);
+    font-size: 44px;
+    line-height: 1;
+    letter-spacing: -0.025em;
+    font-weight: 500;
+    color: var(--ink-text);
+    margin: 18px 0 8px;
+  }
+  .price-value .unit { font-size: 18px; color: var(--ash); }
+  .price-card.featured .price-value .unit { color: var(--cream-soft); }
+  .price-usd {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ash);
+    margin-bottom: 18px;
+  }
+  .price-card.featured .price-usd { color: var(--cream-soft); }
+  .price-link {
+    margin-top: auto;
+    padding-top: 24px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ember);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    align-self: flex-start;
+  }
+  .price-link:hover { border-bottom-color: var(--ember); }
+  .price-card.featured .price-link { color: var(--ember-soft); }
+
+  /* Timeline boxes */
+  .timeline {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    border-top: 1px solid var(--line-cream);
+    border-bottom: 1px solid var(--line-cream);
+  }
+  .week {
+    padding: 32px 24px;
+    border-right: 1px solid var(--line-cream);
+  }
+  .week:last-child { border-right: none; }
+  @media (max-width: 720px) {
+    .timeline { grid-template-columns: repeat(2, 1fr); }
+    .week:nth-child(2n) { border-right: none; }
+    .week:nth-child(-n+2) { border-bottom: 1px solid var(--line-cream); }
+  }
+  .week-num {
+    font-family: var(--font-display);
+    font-size: 40px;
+    line-height: 1;
+    color: var(--ember);
+  }
+
+  /* Who is this for */
+  .verdict-card {
+    padding: 36px;
+    border-radius: var(--r-md);
+    border: 1px solid var(--line-cream);
+    background: var(--paper);
+  }
+  .verdict-card.no { background: var(--paper-2); }
+  .verdict-list { list-style: none; padding: 0; margin: 18px 0 0; }
+  .verdict-list li {
+    padding: 12px 0;
+    font-size: 15.5px;
+    line-height: 1.55;
+    color: var(--ash);
+    border-bottom: 1px solid var(--line-cream);
+  }
+  .verdict-list li:last-child { border-bottom: none; }
+  .verdict-list strong { color: var(--ink-text); font-weight: 600; }
+
+  /* Process steps */
+  .proc-row {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 32px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--line-cream);
+    align-items: start;
+  }
+  .proc-row:last-child { border-bottom: none; }
+  @media (max-width: 720px) { .proc-row { grid-template-columns: 60px 1fr; gap: 20px; } }
+  .proc-num {
+    font-family: var(--font-display);
+    font-size: 36px;
+    line-height: 1;
+    color: var(--ember);
+  }
+  .proc-title {
+    font-family: var(--font-display);
+    font-size: 22px;
+    letter-spacing: -0.015em;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: var(--ink-text);
+  }
+
+  /* FAQ */
+  details.faq {
+    border-bottom: 1px solid var(--line-cream);
+    padding: 24px 0;
+  }
+  details.faq > summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    font-family: var(--font-display);
+    font-size: 22px;
+    letter-spacing: -0.01em;
+    font-weight: 500;
+    color: var(--ink-text);
+  }
+  details.faq > summary::-webkit-details-marker { display: none; }
+  details.faq .chev {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    color: var(--ember);
+    transition: transform 220ms var(--ease-out);
+  }
+  details.faq[open] .chev { transform: rotate(180deg); }
+  details.faq .answer {
+    margin-top: 14px;
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--ash);
+    max-width: 64ch;
+  }
+
+  /* Stack pills inside Why-me */
+  .stack-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+
+  .cta-row { display: flex; flex-wrap: wrap; gap: 12px; }
 </style>
 </head>
-<body class="font-sans text-slate-200 antialiased">
+<body class="surface-paper">
 
 <!-- NAV -->
-<header class="sticky top-0 z-40 backdrop-blur bg-ink/60 border-b border-line">
-  <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-    <a href="#top" class="font-mono text-sm font-bold tracking-tight">
-      <span class="text-accent">AI</span><span class="text-white">·LeadRescue</span>
-    </a>
-    <div class="hidden md:flex items-center gap-8 text-sm text-muted">
-      <a href="#problem" class="hover:text-accent transition">Problem</a>
-      <a href="#solution" class="hover:text-accent transition">Solusi</a>
-      <a href="#pricing" class="hover:text-accent transition">Harga</a>
-      <a href="#faq" class="hover:text-accent transition">FAQ</a>
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="#top" class="brand-mark">AI Lead Rescue<span class="dot">.</span></a>
+    <div class="nav-links">
+      <a class="nav-link" href="#problem">Problem</a>
+      <a class="nav-link" href="#solution">Solusi</a>
+      <a class="nav-link" href="#pricing">Harga</a>
+      <a class="nav-link" href="#faq">FAQ</a>
     </div>
-    <a href="#contact" class="text-sm font-medium px-4 py-2 rounded-full bg-accent text-ink hover:bg-accent2 transition">
-      Ngobrol 30 menit →
+    <a class="btn btn-primary" href="#contact">
+      Ngobrol 30 menit
+      <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
     </a>
-  </nav>
-</header>
+  </div>
+</nav>
 
 <!-- HERO -->
-<section id="top" class="relative overflow-hidden">
-  <div class="absolute inset-0 grid-bg opacity-50 pointer-events-none"></div>
-  <div class="max-w-6xl mx-auto px-6 pt-24 pb-20 relative">
-    <div class="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-accent">
-      <span class="relative w-2 h-2 rounded-full bg-accent pulse-dot"></span>
-      <span>untuk bisnis jasa Indonesia · 30 hari · fixed price</span>
+<header id="top" class="hero">
+  <div class="container">
+    <div class="eyebrow" style="margin-bottom: 28px;">
+      untuk bisnis jasa indonesia · 30 hari · fixed price
     </div>
-    <h1 class="mt-6 text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.05] max-w-4xl">
-      Berhenti kehilangan calon customer yang sebenarnya <span class="text-accent">udah di depan mata.</span>
+    <h1 class="display t-hero" style="max-width: 18ch; color: var(--ink-text);">
+      Berhenti kehilangan calon customer yang sebenarnya <em class="display-italic" style="color: var(--ember);">udah di depan mata.</em>
     </h1>
-    <p class="mt-8 max-w-2xl text-lg md:text-xl text-muted leading-relaxed">
-      Setiap minggu, bisnis jasa kehilangan orang yang udah niat beli — bukan karena produknya jelek, tapi karena chat-nya telat dibales, atau lupa di-follow up. Saya bangun sistem yang nutup kebocoran itu — <span class="text-white">capture, respond, follow-up</span> — pakai AI yang jalan 24/7.
+    <p class="t-lead" style="color: var(--ash); margin-top: 36px; max-width: 58ch;">
+      Setiap minggu, bisnis jasa kehilangan orang yang udah niat beli — bukan karena produknya jelek, tapi karena chat-nya telat dibales, atau lupa di-follow up. Saya bangun sistem yang nutup kebocoran itu — <strong style="color: var(--ink-text); font-weight: 600;">capture, respond, follow-up</strong> — pakai AI yang jalan 24/7.
     </p>
-    <div class="mt-10 flex flex-wrap items-center gap-4">
-      <a href="#contact" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-accent text-ink font-semibold hover:bg-accent2 transition glow">
+    <div class="cta-row" style="margin-top: 40px;">
+      <a class="btn btn-primary" href="#contact">
         Ngobrol 30 menit (gratis)
-        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
-      <a href="#solution" class="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-line text-slate-200 hover:border-accent hover:text-accent transition">
-        Liat cara kerjanya
-      </a>
+      <a class="btn btn-ghost-light" href="#solution">Liat cara kerjanya</a>
     </div>
 
-    <!-- Quick facts -->
-    <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6">
-      <div class="border-l-2 border-accent pl-4">
-        <div class="text-3xl font-bold text-white">30 <span class="text-accent text-base">hari</span></div>
-        <div class="text-xs uppercase tracking-widest text-muted mt-1">build · deploy · training</div>
+    <div class="stat-row" style="margin-top: 80px;">
+      <div class="stat">
+        <div class="stat-value">30</div>
+        <div class="stat-label">Hari · build & deploy</div>
       </div>
-      <div class="border-l-2 border-line pl-4">
-        <div class="text-3xl font-bold text-white">Fixed <span class="text-muted text-2xl">price</span></div>
-        <div class="text-xs uppercase tracking-widest text-muted mt-1">bukan per jam</div>
+      <div class="stat">
+        <div class="stat-value">Fixed</div>
+        <div class="stat-label">Bukan per jam</div>
       </div>
-      <div class="border-l-2 border-line pl-4">
-        <div class="text-3xl font-bold text-white">Loom <span class="text-muted text-2xl">tiap 2 hari</span></div>
-        <div class="text-xs uppercase tracking-widest text-muted mt-1">transparan</div>
+      <div class="stat">
+        <div class="stat-value">2 hari</div>
+        <div class="stat-label">Loom update tiap</div>
       </div>
-      <div class="border-l-2 border-line pl-4">
-        <div class="text-3xl font-bold text-white">Garansi <span class="text-muted text-2xl">jalan</span></div>
-        <div class="text-xs uppercase tracking-widest text-muted mt-1">sampai jalan di production</div>
+      <div class="stat">
+        <div class="stat-value">Garansi</div>
+        <div class="stat-label">Sampai jalan di prod</div>
       </div>
     </div>
   </div>
-</section>
+</header>
 
 <!-- PROBLEM -->
-<section id="problem" class="border-t border-line">
-  <div class="max-w-6xl mx-auto px-6 py-24">
-    <div class="text-xs font-mono uppercase tracking-widest text-accent mb-3">// masalahnya</div>
-    <h2 class="text-3xl md:text-4xl font-bold text-white leading-tight max-w-3xl">
-      Bisnis jasa kamu kayak <span class="text-accent">ember.</span> Calon customer = air yang masuk. Embernya <span class="text-danger">bocor di tiga titik.</span>
-    </h2>
+<section id="problem" class="surface-ink section">
+  <div class="container">
+    <div style="max-width: 760px; margin-bottom: 56px;">
+      <div class="eyebrow" style="margin-bottom: 20px; color: var(--ember-soft);">Masalahnya</div>
+      <h2 class="display t-display" style="color: var(--cream-text);">
+        Bisnis jasa kamu kayak ember.<br>
+        Calon customer = air yang masuk.<br>
+        <em class="display-italic" style="color: var(--danger);">Embernya bocor di tiga titik.</em>
+      </h2>
+    </div>
 
-    <div class="mt-12 grid md:grid-cols-3 gap-6">
-      <article class="p-8 rounded-2xl border border-line bg-ink2">
-        <div class="text-xs font-mono uppercase tracking-widest text-danger mb-4">bocor #1</div>
-        <h3 class="text-xl font-bold text-white">Telat respon.</h3>
-        <p class="mt-3 text-muted leading-relaxed">
-          Inquiry masuk jam 8 malem lewat WhatsApp. Baru kebales jam 11 siang besoknya. Calon customer udah keburu chat 3 kompetitor lain.
+    <div class="grid-3">
+      <article class="leak" style="background: var(--ink-elevated); border-color: var(--line-strong);">
+        <div class="leak-eyebrow">Bocor &middot; 01</div>
+        <h3 class="display t-h3" style="color: var(--cream-text);">Telat respon.</h3>
+        <p style="margin-top: 14px; color: var(--cream-muted); font-size: 15.5px; line-height: 1.65;">
+          Inquiry masuk jam 8 malam lewat WhatsApp. Baru kebales jam 11 siang besoknya. Calon customer udah keburu chat tiga kompetitor lain.
         </p>
       </article>
-      <article class="p-8 rounded-2xl border border-line bg-ink2">
-        <div class="text-xs font-mono uppercase tracking-widest text-danger mb-4">bocor #2</div>
-        <h3 class="text-xl font-bold text-white">Lupa follow-up.</h3>
-        <p class="mt-3 text-muted leading-relaxed">
-          Udah dibales, udah ngobrol, terus... lupa. Ga ada yang nge-chase. Deal yang harusnya jadi, mati pelan-pelan.
+
+      <article class="leak" style="background: var(--ink-elevated); border-color: var(--line-strong);">
+        <div class="leak-eyebrow">Bocor &middot; 02</div>
+        <h3 class="display t-h3" style="color: var(--cream-text);">Lupa follow-up.</h3>
+        <p style="margin-top: 14px; color: var(--cream-muted); font-size: 15.5px; line-height: 1.65;">
+          Udah dibales, udah ngobrol, terus… lupa. Ga ada yang nge-chase. Deal yang harusnya jadi, mati pelan-pelan.
         </p>
       </article>
-      <article class="p-8 rounded-2xl border border-line bg-ink2">
-        <div class="text-xs font-mono uppercase tracking-widest text-danger mb-4">bocor #3</div>
-        <h3 class="text-xl font-bold text-white">Inkonsisten.</h3>
-        <p class="mt-3 text-muted leading-relaxed">
+
+      <article class="leak" style="background: var(--ink-elevated); border-color: var(--line-strong);">
+        <div class="leak-eyebrow">Bocor &middot; 03</div>
+        <h3 class="display t-h3" style="color: var(--cream-text);">Inkonsisten.</h3>
+        <p style="margin-top: 14px; color: var(--cream-muted); font-size: 15.5px; line-height: 1.65;">
           Yang bales kadang owner, kadang admin, kadang anak magang. Tone beda-beda, info kadang salah, kadang malah ga kejawab sama sekali.
         </p>
       </article>
     </div>
 
-    <div class="mt-12 p-6 md:p-8 rounded-2xl border border-line bg-ink2/40">
-      <p class="text-muted leading-relaxed">
-        Yang nyebelin: kebocoran ini <span class="text-white font-semibold">ga keliatan di laporan.</span> Ga ada yang nulis "minggu ini kita kehilangan 6 calon klien karena telat bales." Tapi uangnya beneran ilang. Buat bisnis jasa — agency, konsultan, kontraktor, klinik, studio, biro arsitek — <span class="text-white">1 lead bisa berarti project jutaan sampai puluhan juta.</span> Kehilangan 4-5 lead sebulan itu bukan angka kecil.
-      </p>
-    </div>
+    <p class="t-body" style="color: var(--cream-muted); margin-top: 48px; max-width: 64ch;">
+      Yang nyebelin: kebocoran ini <strong style="color: var(--cream-text);">ga keliatan di laporan.</strong> Ga ada yang nulis "minggu ini kita kehilangan 6 calon klien karena telat bales." Tapi uangnya beneran ilang. Buat bisnis jasa &mdash; agency, konsultan, kontraktor, klinik, studio, biro arsitek &mdash; <strong style="color: var(--cream-text);">1 lead bisa berarti project jutaan sampai puluhan juta.</strong> Kehilangan 4&ndash;5 lead sebulan itu bukan angka kecil.
+    </p>
   </div>
 </section>
 
 <!-- SOLUTION -->
-<section id="solution" class="border-t border-line">
-  <div class="max-w-6xl mx-auto px-6 py-24">
-    <div class="text-xs font-mono uppercase tracking-widest text-accent mb-3">// solusinya</div>
-    <h2 class="text-3xl md:text-4xl font-bold text-white leading-tight max-w-3xl">
-      AI Lead Rescue System — <span class="text-accent">3 komponen.</span> Satu sistem yang ga pernah tidur.
-    </h2>
-
-    <div class="mt-12 space-y-6">
-      <article class="p-8 rounded-2xl border border-line bg-ink2 grid md:grid-cols-[auto,1fr] gap-6 items-start">
-        <div class="text-5xl font-bold text-accent font-mono">01</div>
-        <div>
-          <div class="text-xs font-mono uppercase tracking-widest text-accent mb-2">Capture</div>
-          <h3 class="text-2xl font-bold text-white">Semua inquiry masuk ke satu tempat.</h3>
-          <p class="mt-3 text-muted leading-relaxed">
-            WhatsApp, email, DM Instagram, form website — semua otomatis masuk ke satu dashboard. Ga ada lagi inquiry yang nyangkut di HP yang lagi di-charge atau email yang ke-skip.
-          </p>
-        </div>
-      </article>
-      <article class="p-8 rounded-2xl border border-line bg-ink2 grid md:grid-cols-[auto,1fr] gap-6 items-start">
-        <div class="text-5xl font-bold text-accent font-mono">02</div>
-        <div>
-          <div class="text-xs font-mono uppercase tracking-widest text-accent mb-2">Respond</div>
-          <h3 class="text-2xl font-bold text-white">AI draft balasan dalam hitungan menit, 24/7.</h3>
-          <p class="mt-3 text-muted leading-relaxed">
-            Setiap inquiry langsung dapet draft balasan dari AI (Claude) — sopan, sesuai info bisnis kamu, konsisten. Kamu atau tim tinggal cek + kirim. Calon customer ga nunggu semalaman. AI cuma DRAFT, kamu yang approve — kontrol tetap di tangan kamu.
-          </p>
-        </div>
-      </article>
-      <article class="p-8 rounded-2xl border border-line bg-ink2 grid md:grid-cols-[auto,1fr] gap-6 items-start">
-        <div class="text-5xl font-bold text-accent font-mono">03</div>
-        <div>
-          <div class="text-xs font-mono uppercase tracking-widest text-accent mb-2">Follow-up</div>
-          <h3 class="text-2xl font-bold text-white">Sistem yang ga pernah lupa nge-chase.</h3>
-          <p class="mt-3 text-muted leading-relaxed">
-            Reminder otomatis + nudge sampai lead-nya closing, atau jelas-jelas ga jadi. Ga ada lagi deal yang mati gara-gara "kelupaan".
-          </p>
-        </div>
-      </article>
+<section id="solution" class="section">
+  <div class="container">
+    <div style="max-width: 760px; margin-bottom: 56px;">
+      <div class="eyebrow" style="margin-bottom: 20px;">Solusinya</div>
+      <h2 class="display t-display">
+        AI Lead Rescue System.<br>
+        <em class="display-italic" style="color: var(--ember);">Tiga komponen.</em> Satu sistem yang ga pernah tidur.
+      </h2>
     </div>
 
-    <p class="mt-10 text-sm text-muted">
-      <span class="font-mono text-accent">Phase 2 (upsell nanti):</span> <span class="text-white">Fill</span> — content engine yang ngisi bagian atas funnel, biar lead-nya banyak dari awal.
+    <div class="surface-ink" style="border-radius: var(--r-lg); padding: 48px 40px;">
+      <div style="display: grid; gap: 16px;">
+        <article class="step-card">
+          <div>
+            <div class="step-card-num">01</div>
+          </div>
+          <div>
+            <div class="step-card-eyebrow">Capture</div>
+            <h3 class="display t-h3" style="color: var(--cream-text);">Semua inquiry masuk ke satu tempat.</h3>
+            <p style="margin-top: 12px; color: var(--cream-muted); font-size: 16px; line-height: 1.65;">
+              WhatsApp, email, DM Instagram, form website &mdash; semua otomatis masuk ke satu dashboard. Ga ada lagi inquiry yang nyangkut di HP yang lagi di-charge atau email yang ke-skip.
+            </p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <div>
+            <div class="step-card-num">02</div>
+          </div>
+          <div>
+            <div class="step-card-eyebrow">Respond</div>
+            <h3 class="display t-h3" style="color: var(--cream-text);">AI draft balasan dalam hitungan menit, 24/7.</h3>
+            <p style="margin-top: 12px; color: var(--cream-muted); font-size: 16px; line-height: 1.65;">
+              Setiap inquiry langsung dapet draft balasan dari AI &mdash; sopan, sesuai info bisnis kamu, konsisten. Kamu atau tim tinggal cek + kirim. Calon customer ga nunggu semalaman. AI cuma <em>draft</em>, kamu yang <em>approve</em> &mdash; kontrol tetap di tangan kamu.
+            </p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <div>
+            <div class="step-card-num">03</div>
+          </div>
+          <div>
+            <div class="step-card-eyebrow">Follow-up</div>
+            <h3 class="display t-h3" style="color: var(--cream-text);">Sistem yang ga pernah lupa nge-chase.</h3>
+            <p style="margin-top: 12px; color: var(--cream-muted); font-size: 16px; line-height: 1.65;">
+              Reminder otomatis + nudge sampai lead-nya closing, atau jelas-jelas ga jadi. Ga ada lagi deal yang mati gara-gara "kelupaan."
+            </p>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <p class="fineprint" style="margin-top: 24px; color: var(--ash);">
+      <strong style="color: var(--ember); font-weight: 600;">Phase 2 (upsell nanti):</strong> Fill &mdash; content engine yang ngisi bagian atas funnel, biar lead-nya banyak dari awal.
     </p>
   </div>
 </section>
 
 <!-- WHAT YOU GET -->
-<section class="border-t border-line">
-  <div class="max-w-6xl mx-auto px-6 py-24">
-    <div class="text-xs font-mono uppercase tracking-widest text-accent mb-3">// yang kamu dapet</div>
-    <h2 class="text-3xl md:text-4xl font-bold text-white max-w-3xl">Bukan demo. Sistem yang beneran jalan.</h2>
-    <ul class="mt-10 grid md:grid-cols-2 gap-4 text-slate-200">
-      <li class="flex gap-3 p-5 rounded-xl border border-line bg-ink2/40">
-        <svg class="w-5 h-5 text-ok flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-        <span>Sistem AI Lead Rescue yang jalan di setup bisnis kamu (atau di server saya, terserah)</span>
-      </li>
-      <li class="flex gap-3 p-5 rounded-xl border border-line bg-ink2/40">
-        <svg class="w-5 h-5 text-ok flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-        <span>Dashboard buat lihat semua inquiry + status-nya</span>
-      </li>
-      <li class="flex gap-3 p-5 rounded-xl border border-line bg-ink2/40">
-        <svg class="w-5 h-5 text-ok flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-        <span>Training buat tim kamu — video Loom + sesi langsung</span>
-      </li>
-      <li class="flex gap-3 p-5 rounded-xl border border-line bg-ink2/40">
-        <svg class="w-5 h-5 text-ok flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-        <span>Source code + dokumentasi — kamu yang punya, selamanya</span>
-      </li>
-      <li class="flex gap-3 p-5 rounded-xl border border-line bg-ink2/40 md:col-span-2">
-        <svg class="w-5 h-5 text-ok flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-        <span>Support 30 hari setelah live — kalau ada bug atau penyesuaian, saya benerin</span>
-      </li>
-    </ul>
+<section class="surface-paper-2 section-tight">
+  <div class="container">
+    <div style="max-width: 720px; margin-bottom: 48px;">
+      <div class="eyebrow" style="margin-bottom: 20px;">Yang kamu dapet</div>
+      <h2 class="display t-display">Bukan demo. Sistem yang beneran jalan.</h2>
+    </div>
+
+    <div class="grid-2">
+      <div class="deliverable">
+        <div class="check-circle">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        <span class="t-body" style="color: var(--ink-text);">Sistem AI Lead Rescue yang jalan di setup bisnis kamu (atau di server saya, terserah).</span>
+      </div>
+      <div class="deliverable">
+        <div class="check-circle">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        <span class="t-body" style="color: var(--ink-text);">Dashboard buat lihat semua inquiry + status-nya.</span>
+      </div>
+      <div class="deliverable">
+        <div class="check-circle">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        <span class="t-body" style="color: var(--ink-text);">Training buat tim kamu &mdash; video Loom + sesi langsung.</span>
+      </div>
+      <div class="deliverable">
+        <div class="check-circle">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        <span class="t-body" style="color: var(--ink-text);">Source code + dokumentasi &mdash; kamu yang punya, selamanya.</span>
+      </div>
+      <div class="deliverable" style="grid-column: 1 / -1;">
+        <div class="check-circle">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        <span class="t-body" style="color: var(--ink-text);">Support 30 hari setelah live &mdash; kalau ada bug atau penyesuaian, saya benerin.</span>
+      </div>
+    </div>
   </div>
 </section>
 
 <!-- PRICING -->
-<section id="pricing" class="border-t border-line">
-  <div class="max-w-6xl mx-auto px-6 py-24">
-    <div class="text-xs font-mono uppercase tracking-widest text-accent mb-3">// harga</div>
-    <h2 class="text-3xl md:text-4xl font-bold text-white max-w-3xl">Fixed price. Bukan per jam.</h2>
-    <p class="mt-4 text-muted max-w-2xl">Kamu tau persis bayar berapa dari awal. DP 50% di depan, sisanya pas sistem udah live + jalan.</p>
+<section id="pricing" class="section">
+  <div class="container">
+    <div style="max-width: 720px; margin-bottom: 48px;">
+      <div class="eyebrow" style="margin-bottom: 20px;">Harga</div>
+      <h2 class="display t-display">Fixed price. Bukan per jam.</h2>
+      <p class="t-lead" style="color: var(--ash); margin-top: 20px;">
+        Kamu tau persis bayar berapa dari awal. DP 50% di depan, sisanya pas sistem udah live + jalan.
+      </p>
+    </div>
 
-    <div class="mt-12 grid md:grid-cols-3 gap-6">
-      <article class="p-8 rounded-2xl border border-line bg-ink2 flex flex-col">
-        <div class="text-xs font-mono uppercase tracking-widest text-muted mb-3">Entry</div>
-        <h3 class="text-xl font-bold text-white">AI Lead Audit + Quick Build</h3>
-        <div class="mt-4 text-3xl font-bold text-accent">Rp 47<span class="text-muted text-lg">jt</span> <span class="text-sm text-muted">($3K)</span></div>
-        <p class="mt-4 text-muted text-sm leading-relaxed">Mau coba dulu — audit kebocoran lead kamu + bangun 1 komponen prioritas (biasanya: capture + AI respond).</p>
-        <a href="#contact" class="mt-auto pt-6 text-sm text-accent hover:text-accent2 font-medium">Pilih ini →</a>
+    <div class="grid-3" style="margin-top: 48px;">
+      <article class="price-card">
+        <div class="price-eyebrow">Entry</div>
+        <h3 class="display t-h3" style="font-weight: 500;">AI Lead Audit + Quick Build</h3>
+        <div class="price-value">Rp 47<span class="unit">jt</span></div>
+        <div class="price-usd">≈ $3K USD</div>
+        <p class="t-body" style="color: var(--ash); font-size: 15px;">Mau coba dulu &mdash; audit kebocoran lead kamu + bangun 1 komponen prioritas (biasanya: capture + AI respond).</p>
+        <a class="price-link" href="#contact">Pilih ini &rarr;</a>
       </article>
-      <article class="p-8 rounded-2xl border border-accent bg-ink2 glow flex flex-col relative">
-        <div class="absolute -top-3 left-8 px-3 py-1 rounded-full bg-accent text-ink text-xs font-bold uppercase tracking-widest">Paling Populer</div>
-        <div class="text-xs font-mono uppercase tracking-widest text-accent mb-3">Full Build</div>
-        <h3 class="text-xl font-bold text-white">AI Lead Rescue System</h3>
-        <div class="mt-4 text-3xl font-bold text-accent">Rp 47-125<span class="text-muted text-lg">jt</span> <span class="text-sm text-muted">($3-8K)</span></div>
-        <p class="mt-4 text-muted text-sm leading-relaxed">Sistem lengkap 3 komponen — Capture + Respond + Follow-up. Build 30 hari. Cocok buat bisnis yang serius nutup kebocoran lead-nya.</p>
-        <a href="#contact" class="mt-auto pt-6 text-sm text-accent hover:text-accent2 font-medium">Pilih ini →</a>
+
+      <article class="price-card featured">
+        <span class="price-tag-featured">Paling populer</span>
+        <div class="price-eyebrow">Full build</div>
+        <h3 class="display t-h3" style="font-weight: 500;">AI Lead Rescue System</h3>
+        <div class="price-value">Rp 47&ndash;125<span class="unit">jt</span></div>
+        <div class="price-usd">≈ $3&ndash;8K USD</div>
+        <p style="color: var(--cream-muted); font-size: 15px; line-height: 1.6;">Sistem lengkap tiga komponen &mdash; Capture + Respond + Follow-up. Build 30 hari. Cocok buat bisnis yang serius nutup kebocoran lead-nya.</p>
+        <a class="price-link" href="#contact">Pilih ini &rarr;</a>
       </article>
-      <article class="p-8 rounded-2xl border border-line bg-ink2 flex flex-col">
-        <div class="text-xs font-mono uppercase tracking-widest text-muted mb-3">Lanjutan</div>
-        <h3 class="text-xl font-bold text-white">Retainer (maintenance + adjust)</h3>
-        <div class="mt-4 text-3xl font-bold text-accent">Rp 5-10<span class="text-muted text-lg">jt</span><span class="text-base text-muted">/bulan</span></div>
-        <p class="mt-4 text-muted text-sm leading-relaxed">Setelah sistem live — terus disesuaiin ke pola data baru, tambah integrasi, fix issue. Min 3 bulan.</p>
-        <a href="#contact" class="mt-auto pt-6 text-sm text-accent hover:text-accent2 font-medium">Pilih ini →</a>
+
+      <article class="price-card">
+        <div class="price-eyebrow">Lanjutan</div>
+        <h3 class="display t-h3" style="font-weight: 500;">Retainer (maintenance + adjust)</h3>
+        <div class="price-value">Rp 5&ndash;10<span class="unit">jt / bulan</span></div>
+        <div class="price-usd">Min. 3 bulan</div>
+        <p class="t-body" style="color: var(--ash); font-size: 15px;">Setelah sistem live &mdash; terus disesuaiin ke pola data baru, tambah integrasi, fix issue.</p>
+        <a class="price-link" href="#contact">Pilih ini &rarr;</a>
       </article>
     </div>
   </div>
 </section>
 
 <!-- TIMELINE -->
-<section class="border-t border-line">
-  <div class="max-w-6xl mx-auto px-6 py-24">
-    <div class="text-xs font-mono uppercase tracking-widest text-accent mb-3">// timeline</div>
-    <h2 class="text-3xl md:text-4xl font-bold text-white">30 hari. Jelas tiap minggu.</h2>
-    <p class="mt-4 text-muted max-w-2xl">Tiap 2 hari kirim update Loom — jadi kamu ga perlu nanya-nanya "udah sampai mana?". Kalau ada yang ga jalan, dikasih tau di awal — bukan disembunyiin sampai deadline.</p>
+<section class="surface-paper-2 section-tight">
+  <div class="container">
+    <div style="max-width: 720px; margin-bottom: 40px;">
+      <div class="eyebrow" style="margin-bottom: 20px;">Timeline</div>
+      <h2 class="display t-display">30 hari. Jelas tiap minggu.</h2>
+      <p class="t-lead" style="color: var(--ash); margin-top: 20px;">
+        Tiap dua hari kirim update Loom &mdash; jadi kamu ga perlu nanya-nanya "udah sampai mana?". Kalau ada yang ga jalan, dikasih tau di awal &mdash; bukan disembunyiin sampai deadline.
+      </p>
+    </div>
 
-    <div class="mt-12 grid md:grid-cols-4 gap-6">
-      <div class="p-6 rounded-2xl border border-line bg-ink2">
-        <div class="text-3xl font-bold text-accent font-mono">W1</div>
-        <h3 class="mt-3 font-bold text-white">Audit</h3>
-        <p class="mt-2 text-sm text-muted leading-relaxed">Pelajari alur lead kamu sekarang. Cari titik bocornya.</p>
+    <div class="timeline">
+      <div class="week">
+        <div class="week-num">W1</div>
+        <h3 class="display t-h4" style="margin-top: 16px;">Audit</h3>
+        <p class="t-small" style="color: var(--ash); margin-top: 8px;">Pelajari alur lead kamu sekarang. Cari titik bocornya.</p>
       </div>
-      <div class="p-6 rounded-2xl border border-line bg-ink2">
-        <div class="text-3xl font-bold text-accent font-mono">W2</div>
-        <h3 class="mt-3 font-bold text-white">Build inti</h3>
-        <p class="mt-2 text-sm text-muted leading-relaxed">Capture + AI respond.</p>
+      <div class="week">
+        <div class="week-num">W2</div>
+        <h3 class="display t-h4" style="margin-top: 16px;">Build inti</h3>
+        <p class="t-small" style="color: var(--ash); margin-top: 8px;">Capture + AI respond.</p>
       </div>
-      <div class="p-6 rounded-2xl border border-line bg-ink2">
-        <div class="text-3xl font-bold text-accent font-mono">W3</div>
-        <h3 class="mt-3 font-bold text-white">Build follow-up</h3>
-        <p class="mt-2 text-sm text-muted leading-relaxed">Reminder + nudge engine. Deploy + training tim.</p>
+      <div class="week">
+        <div class="week-num">W3</div>
+        <h3 class="display t-h4" style="margin-top: 16px;">Build follow-up</h3>
+        <p class="t-small" style="color: var(--ash); margin-top: 8px;">Reminder + nudge engine. Deploy + training tim.</p>
       </div>
-      <div class="p-6 rounded-2xl border border-line bg-ink2">
-        <div class="text-3xl font-bold text-accent font-mono">W4</div>
-        <h3 class="mt-3 font-bold text-white">Live + hand-off</h3>
-        <p class="mt-2 text-sm text-muted leading-relaxed">Testing, bug fix, hand-off. Sistem jalan di production.</p>
+      <div class="week">
+        <div class="week-num">W4</div>
+        <h3 class="display t-h4" style="margin-top: 16px;">Live + hand-off</h3>
+        <p class="t-small" style="color: var(--ash); margin-top: 8px;">Testing, bug fix, hand-off. Sistem jalan di production.</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- WHO IS THIS FOR -->
-<section class="border-t border-line">
-  <div class="max-w-6xl mx-auto px-6 py-24">
-    <div class="text-xs font-mono uppercase tracking-widest text-accent mb-3">// buat siapa</div>
-    <h2 class="text-3xl md:text-4xl font-bold text-white">Cocok &amp; ga cocok — saya jujur.</h2>
+<section class="section">
+  <div class="container">
+    <div style="max-width: 720px; margin-bottom: 48px;">
+      <div class="eyebrow" style="margin-bottom: 20px;">Buat siapa</div>
+      <h2 class="display t-display">Cocok &amp; ga cocok &mdash; saya jujur.</h2>
+    </div>
 
-    <div class="mt-12 grid md:grid-cols-2 gap-6">
-      <article class="p-8 rounded-2xl border border-ok/40 bg-ok/5">
-        <div class="flex items-center gap-3 mb-4">
-          <svg class="w-6 h-6 text-ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-          <h3 class="text-xl font-bold text-white">Cocok untuk</h3>
+    <div class="grid-2">
+      <article class="verdict-card">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--ember-tint); color: var(--ember-deep); display: flex; align-items: center; justify-content: center;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+          </div>
+          <h3 class="display t-h3" style="font-weight: 500;">Cocok untuk</h3>
         </div>
-        <ul class="space-y-3 text-muted">
-          <li><span class="text-white font-semibold">Agency</span> (digital, kreatif, marketing) — inquiry project masuk terus, susah di-track</li>
-          <li><span class="text-white font-semibold">Konsultan</span> (bisnis, pajak, HR, IT) — lead bernilai tinggi, sayang kalau bocor</li>
-          <li><span class="text-white font-semibold">Kontraktor / biro arsitek</span> — 1 inquiry = potensi project ratusan juta</li>
-          <li><span class="text-white font-semibold">Klinik kecantikan / estetik</span> — booking-driven, telat bales = pasien pindah</li>
-          <li><span class="text-white font-semibold">Studio</span> (foto, desain, produksi) — inquiry musiman, harus cepat ditangkap</li>
-          <li><span class="text-white font-semibold">Law firm kecil</span> — konsultasi masuk, follow-up sering kelewat</li>
+        <ul class="verdict-list">
+          <li><strong>Agency</strong> (digital, kreatif, marketing) &mdash; inquiry project masuk terus, susah di-track</li>
+          <li><strong>Konsultan</strong> (bisnis, pajak, HR, IT) &mdash; lead bernilai tinggi, sayang kalau bocor</li>
+          <li><strong>Kontraktor / biro arsitek</strong> &mdash; 1 inquiry = potensi project ratusan juta</li>
+          <li><strong>Klinik kecantikan / estetik</strong> &mdash; booking-driven, telat bales = pasien pindah</li>
+          <li><strong>Studio</strong> (foto, desain, produksi) &mdash; inquiry musiman, harus cepat ditangkap</li>
+          <li><strong>Law firm kecil</strong> &mdash; konsultasi masuk, follow-up sering kelewat</li>
         </ul>
       </article>
-      <article class="p-8 rounded-2xl border border-line bg-ink2">
-        <div class="flex items-center gap-3 mb-4">
-          <svg class="w-6 h-6 text-danger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
-          <h3 class="text-xl font-bold text-white">Belum cocok untuk</h3>
+
+      <article class="verdict-card no">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: rgba(181,72,61,0.12); color: var(--danger); display: flex; align-items: center; justify-content: center;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </div>
+          <h3 class="display t-h3" style="font-weight: 500;">Belum cocok untuk</h3>
         </div>
-        <ul class="space-y-3 text-muted">
-          <li>Bisnis yang inquiry-nya cuma 1-2 sebulan (kebocorannya belum cukup mahal buat di-solve)</li>
-          <li>Perusahaan besar yang udah punya tim IT internal + CRM mature</li>
-          <li>Bisnis produk massal yang transaksinya self-service (itu beda problem)</li>
+        <ul class="verdict-list">
+          <li>Bisnis yang inquiry-nya cuma 1&ndash;2 sebulan (kebocorannya belum cukup mahal buat di-solve).</li>
+          <li>Perusahaan besar yang udah punya tim IT internal + CRM mature.</li>
+          <li>Bisnis produk massal yang transaksinya self-service (itu beda problem).</li>
         </ul>
       </article>
     </div>
@@ -340,139 +613,145 @@
 </section>
 
 <!-- WHY ME -->
-<section class="border-t border-line">
-  <div class="max-w-6xl mx-auto px-6 py-24">
-    <div class="grid md:grid-cols-[1fr,1fr] gap-12 items-start">
+<section class="surface-ink section">
+  <div class="container">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start;" class="why-me-grid">
       <div>
-        <div class="text-xs font-mono uppercase tracking-widest text-accent mb-3">// kenapa saya</div>
-        <h2 class="text-3xl md:text-4xl font-bold text-white">Saya bangun sistem yang saya jual.</h2>
-        <p class="mt-6 text-muted leading-relaxed">
-          Saya bukan konsultan yang baca soal automation dari buku. Saya bangun sistem automation beneran di tempat saya kerja — sebuah eksportir di Indonesia. Pipeline yang generate dokumen pengiriman tiap minggu, dan AI inquiry handler yang nangkep lead buyer yang tadinya sering kelewat.
+        <div class="eyebrow" style="margin-bottom: 20px; color: var(--ember-soft);">Kenapa saya</div>
+        <h2 class="display t-display" style="color: var(--cream-text);">
+          Saya bangun sistem yang <em class="display-italic" style="color: var(--ember-soft);">saya jual.</em>
+        </h2>
+        <p class="t-lead" style="color: var(--cream-muted); margin-top: 28px;">
+          Saya bukan konsultan yang baca soal automation dari buku. Saya bangun sistem automation beneran di tempat saya kerja &mdash; sebuah eksportir di Indonesia. Pipeline yang generate dokumen pengiriman tiap minggu, dan AI inquiry handler yang nangkep lead buyer yang tadinya sering kelewat.
         </p>
-        <p class="mt-4 text-muted leading-relaxed">
-          Saya tau rasanya kerjaan operasional yang bocor, <span class="text-white">dari dalam</span> — bukan dari teori.
+        <p class="t-body" style="color: var(--cream-muted); margin-top: 20px;">
+          Saya tau rasanya kerjaan operasional yang bocor &mdash; <strong style="color: var(--cream-text); font-weight: 600;">dari dalam</strong>, bukan dari teori.
         </p>
       </div>
-      <div class="p-8 rounded-2xl border border-line bg-ink2">
-        <div class="text-xs font-mono uppercase tracking-widest text-accent mb-3">// stack</div>
-        <div class="flex flex-wrap gap-2 font-mono text-sm">
-          <span class="px-3 py-1.5 rounded border border-line text-slate-200">Python</span>
-          <span class="px-3 py-1.5 rounded border border-line text-slate-200">Claude API</span>
-          <span class="px-3 py-1.5 rounded border border-line text-slate-200">n8n</span>
-          <span class="px-3 py-1.5 rounded border border-line text-slate-200">WhatsApp API</span>
-          <span class="px-3 py-1.5 rounded border border-line text-slate-200">Gmail API</span>
-          <span class="px-3 py-1.5 rounded border border-line text-slate-200">PostgreSQL</span>
-          <span class="px-3 py-1.5 rounded border border-line text-slate-200">FastAPI</span>
+
+      <div style="background: var(--ink-elevated); border: 1px solid var(--line-strong); border-radius: var(--r-md); padding: 36px;">
+        <div class="eyebrow" style="margin-bottom: 20px; color: var(--ember-soft);">Stack</div>
+        <div class="stack-pills">
+          <span class="pill" style="border-color: var(--line-strong); color: var(--cream-muted);">Python</span>
+          <span class="pill" style="border-color: var(--line-strong); color: var(--cream-muted);">Claude API</span>
+          <span class="pill" style="border-color: var(--line-strong); color: var(--cream-muted);">n8n</span>
+          <span class="pill" style="border-color: var(--line-strong); color: var(--cream-muted);">WhatsApp API</span>
+          <span class="pill" style="border-color: var(--line-strong); color: var(--cream-muted);">Gmail API</span>
+          <span class="pill" style="border-color: var(--line-strong); color: var(--cream-muted);">PostgreSQL</span>
+          <span class="pill" style="border-color: var(--line-strong); color: var(--cream-muted);">FastAPI</span>
         </div>
-        <p class="mt-6 text-muted text-sm leading-relaxed">
+        <p class="t-body" style="color: var(--cream-muted); margin-top: 24px;">
           Bukan tools yang hype. Tools yang beneran jalan. Mostly tools yang punya komunitas Indonesia kuat, jadi tim kamu bisa belajar maintain sendiri kapan-kapan kalau mau.
         </p>
-        <div class="mt-6 pt-6 border-t border-line">
-          <a href="https://gamskie.github.io/gammawira-portfolio/" target="_blank" rel="noopener" class="text-sm text-accent hover:text-accent2 font-medium inline-flex items-center gap-1">
-            Liat case study + portfolio →
+        <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--line-strong);">
+          <a href="https://gamskie.github.io/gammawira-portfolio/" target="_blank" rel="noopener" style="font-family: var(--font-mono); font-size: 13px; color: var(--ember-soft); text-decoration: none;">
+            Liat case study + portfolio &rarr;
           </a>
+        </div>
+      </div>
+    </div>
+    <style>@media(max-width:920px){.why-me-grid{grid-template-columns:1fr!important;gap:40px!important;}}</style>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section">
+  <div class="container">
+    <div style="max-width: 720px; margin-bottom: 48px;">
+      <div class="eyebrow" style="margin-bottom: 20px;">Cara kerja sama</div>
+      <h2 class="display t-display">Lima langkah. No surprises.</h2>
+    </div>
+
+    <div>
+      <div class="proc-row">
+        <div class="proc-num">01</div>
+        <div>
+          <h3 class="proc-title">Ngobrol 30 menit <span class="fineprint" style="color: var(--ember); text-transform: uppercase;">— gratis</span></h3>
+          <p class="t-body" style="color: var(--ash);">Saya dengerin alur lead kamu, saya tunjuk di mana bocornya.</p>
+        </div>
+      </div>
+      <div class="proc-row">
+        <div class="proc-num">02</div>
+        <div>
+          <h3 class="proc-title">Proposal</h3>
+          <p class="t-body" style="color: var(--ash);">Saya kirim rencana konkret + harga fixed. Bukan range yang ambigu.</p>
+        </div>
+      </div>
+      <div class="proc-row">
+        <div class="proc-num">03</div>
+        <div>
+          <h3 class="proc-title">DP 50%</h3>
+          <p class="t-body" style="color: var(--ash);">Saya mulai kerja. Kontrak hitam-putih.</p>
+        </div>
+      </div>
+      <div class="proc-row">
+        <div class="proc-num">04</div>
+        <div>
+          <h3 class="proc-title">30 hari build</h3>
+          <p class="t-body" style="color: var(--ash);">Update Loom tiap dua hari. Kalau ada hambatan, saya kasih tau awal &mdash; bukan disembunyiin sampai akhir.</p>
+        </div>
+      </div>
+      <div class="proc-row">
+        <div class="proc-num">05</div>
+        <div>
+          <h3 class="proc-title">Live + hand-off</h3>
+          <p class="t-body" style="color: var(--ash);">Pelunasan, sistem jalan, kamu yang punya. Support 30 hari termasuk.</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
-<section class="border-t border-line">
-  <div class="max-w-6xl mx-auto px-6 py-24">
-    <div class="text-xs font-mono uppercase tracking-widest text-accent mb-3">// cara kerja sama</div>
-    <h2 class="text-3xl md:text-4xl font-bold text-white">5 langkah. No surprises.</h2>
-
-    <ol class="mt-12 space-y-4">
-      <li class="p-6 rounded-2xl border border-line bg-ink2 grid grid-cols-[auto,1fr] gap-6 items-start">
-        <div class="text-2xl font-bold text-accent font-mono w-10">01</div>
-        <div>
-          <h3 class="font-bold text-white">Ngobrol 30 menit <span class="text-accent text-sm font-normal">(gratis)</span></h3>
-          <p class="mt-1 text-muted text-sm">Saya dengerin alur lead kamu, saya tunjuk di mana bocornya.</p>
-        </div>
-      </li>
-      <li class="p-6 rounded-2xl border border-line bg-ink2 grid grid-cols-[auto,1fr] gap-6 items-start">
-        <div class="text-2xl font-bold text-accent font-mono w-10">02</div>
-        <div>
-          <h3 class="font-bold text-white">Proposal</h3>
-          <p class="mt-1 text-muted text-sm">Saya kirim rencana konkret + harga fixed. Bukan range yang ambigu.</p>
-        </div>
-      </li>
-      <li class="p-6 rounded-2xl border border-line bg-ink2 grid grid-cols-[auto,1fr] gap-6 items-start">
-        <div class="text-2xl font-bold text-accent font-mono w-10">03</div>
-        <div>
-          <h3 class="font-bold text-white">DP 50%</h3>
-          <p class="mt-1 text-muted text-sm">Saya mulai kerja. Kontrak hitam-putih.</p>
-        </div>
-      </li>
-      <li class="p-6 rounded-2xl border border-line bg-ink2 grid grid-cols-[auto,1fr] gap-6 items-start">
-        <div class="text-2xl font-bold text-accent font-mono w-10">04</div>
-        <div>
-          <h3 class="font-bold text-white">30 hari build</h3>
-          <p class="mt-1 text-muted text-sm">Update Loom tiap 2 hari. Kalau ada hambatan, saya kasih tau awal — bukan disembunyiin sampai akhir.</p>
-        </div>
-      </li>
-      <li class="p-6 rounded-2xl border border-line bg-ink2 grid grid-cols-[auto,1fr] gap-6 items-start">
-        <div class="text-2xl font-bold text-accent font-mono w-10">05</div>
-        <div>
-          <h3 class="font-bold text-white">Live + hand-off</h3>
-          <p class="mt-1 text-muted text-sm">Pelunasan, sistem jalan, kamu yang punya. Support 30 hari termasuk.</p>
-        </div>
-      </li>
-    </ol>
-  </div>
-</section>
-
 <!-- FAQ -->
-<section id="faq" class="border-t border-line">
-  <div class="max-w-4xl mx-auto px-6 py-24">
-    <div class="text-xs font-mono uppercase tracking-widest text-accent mb-3">// FAQ</div>
-    <h2 class="text-3xl md:text-4xl font-bold text-white">Pertanyaan yang sering muncul.</h2>
+<section id="faq" class="surface-paper-2 section">
+  <div class="container-narrow">
+    <div class="eyebrow" style="margin-bottom: 20px;">FAQ</div>
+    <h2 class="display t-display">Pertanyaan yang sering muncul.</h2>
 
-    <div class="mt-12 space-y-4">
-      <details class="p-6 rounded-2xl border border-line bg-ink2">
-        <summary class="flex items-center justify-between gap-4">
-          <h3 class="font-bold text-white text-lg">Tim saya kecil, apa worth it?</h3>
-          <svg class="chev w-5 h-5 text-accent flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+    <div style="margin-top: 48px;">
+      <details class="faq">
+        <summary>
+          Tim saya kecil, apa worth it?
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
         </summary>
-        <p class="mt-4 text-muted leading-relaxed">
+        <p class="answer">
           Justru tim kecil yang paling kebantu. Tim besar punya orang khusus buat ini. Tim kecil = owner-nya sendiri yang kewalahan. Sistem ini ngasih kamu "1 staff yang ga pernah tidur" tanpa harus gaji 1 orang.
         </p>
       </details>
-      <details class="p-6 rounded-2xl border border-line bg-ink2">
-        <summary class="flex items-center justify-between gap-4">
-          <h3 class="font-bold text-white text-lg">AI-nya bakal bales sembarangan ga?</h3>
-          <svg class="chev w-5 h-5 text-accent flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      <details class="faq">
+        <summary>
+          AI-nya bakal bales sembarangan ga?
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
         </summary>
-        <p class="mt-4 text-muted leading-relaxed">
-          Engga. AI cuma DRAFT. Kamu atau tim yang approve + kirim. Kontrol tetap di tangan kamu. Setelah beberapa minggu dan kamu percaya, baru sebagian bisa di-otomatis penuh.
+        <p class="answer">
+          Engga. AI cuma <em>draft</em>. Kamu atau tim yang approve + kirim. Kontrol tetap di tangan kamu. Setelah beberapa minggu dan kamu percaya, baru sebagian bisa di-otomatis penuh.
         </p>
       </details>
-      <details class="p-6 rounded-2xl border border-line bg-ink2">
-        <summary class="flex items-center justify-between gap-4">
-          <h3 class="font-bold text-white text-lg">Data customer saya aman?</h3>
-          <svg class="chev w-5 h-5 text-accent flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      <details class="faq">
+        <summary>
+          Data customer saya aman?
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
         </summary>
-        <p class="mt-4 text-muted leading-relaxed">
+        <p class="answer">
           Sistem deploy di setup kamu sendiri kalau kamu mau. Data ga kemana-mana. Source code juga kamu yang pegang.
         </p>
       </details>
-      <details class="p-6 rounded-2xl border border-line bg-ink2">
-        <summary class="flex items-center justify-between gap-4">
-          <h3 class="font-bold text-white text-lg">Saya udah pakai CRM. Bisa nyambung?</h3>
-          <svg class="chev w-5 h-5 text-accent flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      <details class="faq">
+        <summary>
+          Saya udah pakai CRM. Bisa nyambung?
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
         </summary>
-        <p class="mt-4 text-muted leading-relaxed">
-          Bagus — sistem ini bisa nyambung ke CRM yang udah ada. Kita ga ganti yang udah jalan, kita tambal yang bocor.
+        <p class="answer">
+          Bagus &mdash; sistem ini bisa nyambung ke CRM yang udah ada. Kita ga ganti yang udah jalan, kita tambal yang bocor.
         </p>
       </details>
-      <details class="p-6 rounded-2xl border border-line bg-ink2">
-        <summary class="flex items-center justify-between gap-4">
-          <h3 class="font-bold text-white text-lg">Kenapa fixed price, bukan per jam?</h3>
-          <svg class="chev w-5 h-5 text-accent flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      <details class="faq">
+        <summary>
+          Kenapa fixed price, bukan per jam?
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
         </summary>
-        <p class="mt-4 text-muted leading-relaxed">
-          Karena kamu beli HASIL, bukan beli jam kerja saya. Kamu tau persis bayar berapa. Risiko "kok jadi mahal" itu di saya, bukan di kamu.
+        <p class="answer">
+          Karena kamu beli hasil, bukan beli jam kerja saya. Kamu tau persis bayar berapa. Risiko "kok jadi mahal" itu di saya, bukan di kamu.
         </p>
       </details>
     </div>
@@ -480,41 +759,40 @@
 </section>
 
 <!-- CTA / CONTACT -->
-<section id="contact" class="border-t border-line">
-  <div class="max-w-4xl mx-auto px-6 py-24 text-center">
-    <div class="text-xs font-mono uppercase tracking-widest text-accent mb-3">// ngobrol</div>
-    <h2 class="text-4xl md:text-5xl font-bold text-white leading-tight">
-      30 menit. <span class="text-accent">Gratis.</span><br/>
+<section id="contact" class="surface-ink section">
+  <div class="container-narrow" style="text-align: center;">
+    <div class="eyebrow" style="justify-content: center; color: var(--ember-soft); margin-bottom: 24px;">Ngobrol</div>
+    <h2 class="display t-hero" style="color: var(--cream-text); max-width: 16ch; margin: 0 auto;">
+      30 menit. <em class="display-italic" style="color: var(--ember-soft);">Gratis.</em><br>
       Saya tunjuk di mana bocornya.
     </h2>
-    <p class="mt-6 text-muted max-w-xl mx-auto">
-      Kirim email — deskripsi singkat: bisnis kamu apa, inquiry biasanya masuk lewat mana, dan bagian mana yang paling sering bikin lead kabur. Saya bales dalam 24 jam.
+    <p class="t-lead" style="color: var(--cream-muted); margin: 32px auto 0; max-width: 56ch;">
+      Kirim email &mdash; deskripsi singkat: bisnis kamu apa, inquiry biasanya masuk lewat mana, dan bagian mana yang paling sering bikin lead kabur. Saya bales dalam 24 jam.
     </p>
-    <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
-      <a href="mailto:gammawirawibowo@gmail.com?subject=AI%20Lead%20Rescue%20-%20Ngobrol%2030%20menit" class="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-accent text-ink font-semibold hover:bg-accent2 transition glow text-lg">
+    <div class="cta-row" style="justify-content: center; margin-top: 40px;">
+      <a class="btn btn-primary" href="mailto:gammawirawibowo@gmail.com?subject=AI%20Lead%20Rescue%20-%20Ngobrol%2030%20menit">
         gammawirawibowo@gmail.com
-        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
     </div>
-    <div class="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm text-muted">
-      <a href="https://linkedin.com/in/gammawira" target="_blank" rel="noopener" class="hover:text-accent transition">LinkedIn</a>
-      <span class="opacity-30">·</span>
-      <a href="https://gammawira.substack.com" target="_blank" rel="noopener" class="hover:text-accent transition">Substack</a>
-      <span class="opacity-30">·</span>
-      <a href="https://gamskie.github.io/gammawira-portfolio/" target="_blank" rel="noopener" class="hover:text-accent transition">Portfolio</a>
-      <span class="opacity-30">·</span>
-      <a href="https://github.com/Gamskie" target="_blank" rel="noopener" class="hover:text-accent transition">GitHub</a>
+    <div class="fineprint" style="margin-top: 48px; color: var(--cream-soft); display: flex; justify-content: center; flex-wrap: wrap; gap: 24px;">
+      <a href="https://linkedin.com/in/gammawira" target="_blank" rel="noopener" style="color: var(--ember-soft); text-decoration: none;">LinkedIn</a>
+      <a href="https://gammawira.substack.com" target="_blank" rel="noopener" style="color: var(--ember-soft); text-decoration: none;">Substack</a>
+      <a href="https://gamskie.github.io/gammawira-portfolio/" target="_blank" rel="noopener" style="color: var(--ember-soft); text-decoration: none;">Portfolio</a>
+      <a href="https://github.com/Gamskie" target="_blank" rel="noopener" style="color: var(--ember-soft); text-decoration: none;">GitHub</a>
     </div>
   </div>
 </section>
 
 <!-- FOOTER -->
-<footer class="border-t border-line">
-  <div class="max-w-6xl mx-auto px-6 py-10 flex flex-wrap items-center justify-between gap-4 text-sm text-muted">
-    <div class="font-mono">
-      <span class="text-accent">AI</span>·LeadRescue · by <a href="https://gamskie.github.io/gammawira-portfolio/" class="hover:text-accent transition">Gamma Wira Wibowo</a>
+<footer class="surface-ink section-rule-top" style="padding: 32px 0;">
+  <div class="container" style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+    <div class="fineprint">
+      AI Lead Rescue &middot; by <a href="https://gamskie.github.io/gammawira-portfolio/" style="color: var(--ember-soft); text-decoration: none;">Gamma Wira Wibowo</a>
     </div>
-    <div>Bandung 🇮🇩 · UTC+7 · Tersedia untuk project remote</div>
+    <div class="fineprint">
+      Bandung &middot; UTC+7 &middot; remote-ready
+    </div>
   </div>
 </footer>
 
