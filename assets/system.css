@@ -423,6 +423,144 @@ body {
 .paper-grain > * { position: relative; z-index: 1; }
 
 /* ============================================================
+   Site card — for "Sites shipped" portfolio section
+   ============================================================ */
+.site-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  border: 1px solid var(--line-cream);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: all 280ms var(--ease-out);
+}
+.site-card:hover {
+  border-color: var(--ash-soft);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-3px);
+}
+.site-thumb {
+  aspect-ratio: 16 / 10;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, var(--paper-2) 25%, var(--paper-3) 25%, var(--paper-3) 50%, var(--paper-2) 50%, var(--paper-2) 75%, var(--paper-3) 75%)
+    0 0 / 24px 24px;
+  border-bottom: 1px solid var(--line-cream);
+}
+.site-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  transition: transform 800ms var(--ease-out);
+  background: var(--paper-2);
+}
+.site-card:hover .site-thumb img { transform: scale(1.03); }
+.site-status {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(26,23,21,0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: var(--r-full);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--paper);
+}
+.site-status::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.site-status.live::before { background: #6ec76e; box-shadow: 0 0 8px rgba(110,199,110,0.6); }
+.site-status.wip::before { background: var(--ember); }
+.site-meta {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+.site-meta h3 {
+  font-family: var(--font-display);
+  font-size: 24px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  font-weight: 500;
+  color: var(--ink-text);
+  margin: 0;
+}
+.site-meta .url {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--ember);
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.site-meta .desc {
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--ash);
+  margin: 0;
+}
+.site-meta .role {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--ash-soft);
+  margin-top: 4px;
+}
+.site-meta .pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.site-meta .pills .pill {
+  font-size: 10.5px;
+  padding: 4px 9px;
+  letter-spacing: 0.04em;
+}
+.site-foot {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--line-cream);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.site-foot .arrow-link {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ember);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: gap 220ms var(--ease-out);
+}
+.site-card:hover .site-foot .arrow-link { gap: 10px; }
+
+/* ============================================================
    Selection
    ============================================================ */
 ::selection { background: var(--ember); color: var(--paper); }
