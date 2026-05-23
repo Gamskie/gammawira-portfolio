@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Self-Audit: Seberapa Bocor Pipeline Lead Bisnismu? | Gamma Wira</title>
+<meta name="description" content="Tes 2 menit: cari tahu di mana calon customer bisnismu kabur — dari capture, kecepatan respons, sampai follow-up. Gratis, langsung dapat skor + diagnosa.">
+<meta name="theme-color" content="#1c2429">
+<meta property="og:title" content="Self-Audit: Seberapa Bocor Pipeline Lead Bisnismu?">
+<meta property="og:description" content="Tes 2 menit, gratis. Cari tahu berapa calon customer yang diam-diam kabur tiap bulan.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231c2429'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='20' font-weight='400' text-anchor='middle' fill='%23b3c80a'%3EL%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/system.css">
+<style>
+  .auwrap{max-width:760px;margin:0 auto;padding:0 24px}
+  .auhero{padding:96px 0 40px}
+  @media(max-width:720px){.auhero{padding:64px 0 32px}}
+  .eyebrow{font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--ember-deep);margin-bottom:14px}
+  h1{font-family:var(--font-display);font-weight:600;font-size:clamp(30px,5vw,46px);line-height:1.06;margin:0 0 16px;color:var(--ink-text)}
+  .lede{font-size:18px;line-height:1.6;color:var(--ash);max-width:60ch}
+  .meta{font-family:var(--font-mono);font-size:12px;color:var(--ash-soft);margin-top:18px;letter-spacing:.04em}
+
+  .qsec{margin:8px 0 0}
+  .qcat{font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ember-deep);margin:40px 0 4px;padding-bottom:8px;border-bottom:1px solid var(--line-cream)}
+  .q{padding:24px 0;border-bottom:1px solid var(--line-cream)}
+  .q .qt{font-family:var(--font-display);font-size:19px;line-height:1.35;margin:0 0 14px;color:var(--ink-text)}
+  .q .qn{color:var(--ember-deep);font-family:var(--font-mono);font-size:13px;margin-right:8px}
+  label.opt{display:flex;gap:12px;align-items:flex-start;padding:11px 14px;border:1px solid var(--line-cream);border-radius:var(--r-md);margin:7px 0;cursor:pointer;background:var(--paper);transition:all .15s var(--ease-out);font-size:15px;color:var(--ink-text)}
+  label.opt:hover{border-color:var(--ember-deep);background:var(--paper-2)}
+  label.opt input{margin-top:3px;accent-color:var(--ember-deep);flex-shrink:0}
+  label.opt.sel{border-color:var(--ember-deep);background:var(--ember-tint);box-shadow:inset 0 0 0 1px var(--ember-deep)}
+
+  .cta-btn{display:inline-block;background:var(--ember);color:#1c2429;font-family:var(--font-sans);font-weight:600;font-size:16px;padding:16px 32px;border:none;border-radius:var(--r-full);cursor:pointer;text-decoration:none;transition:all .2s var(--ease-out);box-shadow:var(--shadow-lime)}
+  .cta-btn:hover{background:var(--ember-deep);transform:translateY(-1px)}
+  .cta-btn:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
+  .wa-btn{background:#25d366;color:#fff}
+  .wa-btn:hover{background:#1eb858}
+
+  .submitbar{margin:36px 0;text-align:center}
+  .progresstxt{font-family:var(--font-mono);font-size:12px;color:var(--ash-soft);margin-bottom:14px}
+
+  /* result */
+  #result{display:none;margin:40px 0 0;scroll-margin-top:30px}
+  .scorecard{background:var(--ink);color:var(--cream-text);border-radius:var(--r-lg);padding:40px 32px;text-align:center;box-shadow:var(--shadow-lg)}
+  .scorenum{font-family:var(--font-display);font-size:64px;line-height:1;color:var(--ember-soft)}
+  .scoremax{font-family:var(--font-mono);font-size:14px;color:var(--cream-soft)}
+  .tier{font-family:var(--font-display);font-size:26px;margin:18px 0 6px}
+  .tierdesc{color:var(--cream-muted);font-size:16px;line-height:1.6;max-width:52ch;margin:0 auto}
+  .leakbar{height:12px;border-radius:6px;background:rgba(245,243,238,.12);overflow:hidden;margin:24px auto 8px;max-width:420px}
+  .leakfill{height:100%;border-radius:6px;transition:width .8s var(--ease-out)}
+  .breakdown{margin:28px 0 0;text-align:left;max-width:480px;margin-left:auto;margin-right:auto}
+  .brow{display:flex;justify-content:space-between;padding:10px 0;border-top:1px solid var(--line-strong);font-size:14px}
+  .brow .bk{color:var(--cream-muted)} .brow .bv{font-family:var(--font-mono);color:var(--ember-soft)}
+  .nextbox{background:var(--paper);border:1px solid var(--line-cream);border-left:3px solid var(--ember);border-radius:var(--r-md);padding:28px;margin:24px 0}
+  .nextbox h3{font-family:var(--font-display);font-size:22px;margin:0 0 10px;color:var(--ink-text)}
+  .nextbox p{color:var(--ash);line-height:1.6;margin:0 0 18px}
+  .foot{margin:48px 0 80px;text-align:center;color:var(--ash-soft);font-family:var(--font-mono);font-size:12px;line-height:1.8}
+  .foot a{color:var(--ember-deep)}
+  .backlink{font-family:var(--font-mono);font-size:13px;color:var(--ash);text-decoration:none}
+</style>
+</head>
+<body>
+
+<div class="auwrap">
+  <div class="auhero">
+    <a href="index.html" class="backlink">← AI Lead Rescue</a>
+    <div class="eyebrow" style="margin-top:24px">Self-Audit · Gratis · 2 menit</div>
+    <h1>Seberapa bocor pipeline lead bisnismu?</h1>
+    <p class="lede">Tiap bisnis jasa kehilangan calon customer diam-diam — inquiry telat dibalas, lead lupa di-follow-up, chat numpuk pas lagi sibuk. Jawab 12 pertanyaan jujur, langsung dapat skor + diagnosa di mana "ember"-mu bocor.</p>
+    <p class="meta">Tanpa daftar. Tanpa email. Jawaban tidak disimpan ke mana-mana.</p>
+  </div>
+
+  <form id="auditForm">
+    <div id="questions"></div>
+
+    <div class="submitbar">
+      <div class="progresstxt" id="progress">0 / 12 terjawab</div>
+      <button type="button" class="cta-btn" id="seeResult" disabled>Lihat hasil audit-ku →</button>
+    </div>
+  </form>
+
+  <div id="result">
+    <div class="scorecard">
+      <div class="eyebrow" style="color:var(--ember-soft)">Hasil Audit</div>
+      <div><span class="scorenum" id="rScore">0</span><span class="scoremax"> / 36 sehat</span></div>
+      <div class="leakbar"><div class="leakfill" id="rFill"></div></div>
+      <div class="tier" id="rTier">—</div>
+      <div class="tierdesc" id="rDesc">—</div>
+      <div class="breakdown" id="rBreak"></div>
+    </div>
+
+    <div class="nextbox">
+      <h3 id="nextTitle">Langkah berikutnya</h3>
+      <p id="nextBody"></p>
+      <a href="#" class="cta-btn wa-btn" id="waBtn" target="_blank" rel="noopener">💬 Chat Gamma di WhatsApp</a>
+    </div>
+  </div>
+
+  <div class="foot">
+    Dibuat oleh Gamma Wira Wibowo · AI &amp; Automation builder<br>
+    <a href="https://gamskie.github.io/gammawira-portfolio/">Portfolio</a> · WA +65 8317 4237
+  </div>
+</div>
+
+<script>
+const QUESTIONS = [
+  { cat:"1 · CAPTURE — Nangkep inquiry", items:[
+    { q:"Inquiry masuk dari berapa channel berbeda (WA, IG DM, email, web form, marketplace)?",
+      opts:[ ["1 channel aja — semua ke satu tempat",3],["2-3 channel, tapi kepantau",2],["Banyak channel, suka kececer",1],["Nggak yakin semua channel kepantau",0] ] },
+    { q:"Pernah sadar ada inquiry yang kelewat / baru kebaca berhari-hari kemudian?",
+      opts:[ ["Hampir nggak pernah",3],["Sesekali",2],["Lumayan sering",1],["Sering banget / pasti ada yang kelewat",0] ] },
+    { q:"Kalau kamu lagi sibuk/cuti, ada yang mastiin inquiry tetap kepegang?",
+      opts:[ ["Ya, ada sistem/orang yang jaga",3],["Ada tapi nggak konsisten",1],["Nggak ada — numpuk sampai aku balik",0] ] },
+  ]},
+  { cat:"2 · SPEED — Kecepatan respons", items:[
+    { q:"Rata-rata berapa lama inquiry pertama dibalas?",
+      opts:[ ["Di bawah 15 menit",3],["Dalam 1-2 jam",2],["Beberapa jam sampai sehari",1],["Lebih dari sehari / nggak nentu",0] ] },
+    { q:"Inquiry yang masuk malam / weekend / di luar jam kerja — dibalas kapan?",
+      opts:[ ["Tetap kebalas cepat (ada otomatis)",3],["Besok paginya",1],["Senin / pas inget aja",0] ] },
+    { q:"Seberapa yakin kamu calon customer NGGAK lari ke kompetitor gara-gara kelamaan dibalas?",
+      opts:[ ["Sangat yakin",3],["Cukup yakin",2],["Agak khawatir",1],["Pasti ada yang lari",0] ] },
+  ]},
+  { cat:"3 · CONSISTENCY — Kualitas balasan", items:[
+    { q:"Kualitas & isi balasan ke customer konsisten, atau tergantung siapa yang pegang HP?",
+      opts:[ ["Konsisten — ada standar/template",3],["Lumayan konsisten",2],["Tergantung mood & orangnya",1],["Berantakan / beda-beda",0] ] },
+    { q:"Punya jawaban siap-pakai untuk pertanyaan yang sering muncul (harga, proses, dll)?",
+      opts:[ ["Ya, lengkap",3],["Sebagian",1],["Ngetik manual tiap kali",0] ] },
+    { q:"Balasan kamu kedengeran personal & meyakinkan, atau buru-buru/seadanya?",
+      opts:[ ["Personal & rapi",3],["Standar aja",2],["Sering buru-buru",1],["Seadanya / asal balas",0] ] },
+  ]},
+  { cat:"4 · FOLLOW-UP & TRACKING — Nutup deal", items:[
+    { q:"Kalau calon customer udah ditawarin tapi ngilang, ada follow-up?",
+      opts:[ ["Ya, otomatis / terjadwal",3],["Manual kalau inget",1],["Hampir nggak pernah follow-up",0] ] },
+    { q:"Berapa kali biasanya kamu follow-up sebelum nyerah?",
+      opts:[ ["3 kali atau lebih",3],["1-2 kali",1],["Nggak follow-up sama sekali",0] ] },
+    { q:"Tahu nggak berapa inquiry masuk bulan ini & berapa yang jadi customer (conversion)?",
+      opts:[ ["Tahu angkanya",3],["Kira-kira aja",1],["Nggak ngitung sama sekali",0] ] },
+  ]},
+];
+
+const MAX = 36;
+let flat = [];
+QUESTIONS.forEach((sec,si)=>sec.items.forEach((it,ii)=>flat.push({si,ii,...it})));
+
+// render
+const qDiv = document.getElementById('questions');
+let qIndex = 0;
+QUESTIONS.forEach((sec,si)=>{
+  const cat=document.createElement('div'); cat.className='qcat'; cat.textContent=sec.cat; qDiv.appendChild(cat);
+  sec.items.forEach((it,ii)=>{
+    qIndex++;
+    const wrap=document.createElement('div'); wrap.className='q';
+    const t=document.createElement('div'); t.className='qt';
+    t.innerHTML='<span class="qn">'+String(qIndex).padStart(2,'0')+'</span>'+it.q;
+    wrap.appendChild(t);
+    it.opts.forEach((o,oi)=>{
+      const lab=document.createElement('label'); lab.className='opt';
+      const inp=document.createElement('input');
+      inp.type='radio'; inp.name='q_'+si+'_'+ii; inp.value=o[1];
+      inp.dataset.cat=si;
+      inp.addEventListener('change',()=>{
+        document.getElementsByName(inp.name).forEach(r=>r.closest('.opt').classList.remove('sel'));
+        lab.classList.add('sel'); updateProgress();
+      });
+      const span=document.createElement('span'); span.textContent=o[0];
+      lab.appendChild(inp); lab.appendChild(span); wrap.appendChild(lab);
+    });
+    qDiv.appendChild(wrap);
+  });
+});
+
+const total = flat.length;
+function answered(){ return document.querySelectorAll('#questions input:checked').length; }
+function updateProgress(){
+  const a=answered();
+  document.getElementById('progress').textContent=a+' / '+total+' terjawab';
+  document.getElementById('seeResult').disabled = a<total;
+}
+
+const WA = '6583174237';
+const TIERS = [
+  { min:29, name:"Bocor kecil — pipeline sehat", color:"#6ec76e",
+    desc:"Mantap. Dasar capture–respons–follow-up kamu udah kuat. Yang tersisa tinggal optimasi tipis biar makin konsisten pas volume naik.",
+    nextT:"Tinggal finishing", nextB:"Pipeline kamu udah bagus. Kalau mau di-stress-test biar tetap rapi pas customer makin banyak, kita bisa ngobrol santai soal titik optimasi terakhir." },
+  { min:18, name:"Bocor sedang — ada yang netes", color:"#d4a017",
+    desc:"Pondasinya ada, tapi ada beberapa titik yang netes — biasanya di kecepatan respons atau follow-up yang nggak konsisten. Tiap bulan kemungkinan ada calon customer yang kabur tanpa kamu sadar.",
+    nextT:"Tutup 2-3 kebocoran utama", nextB:"Skor kamu nunjukkin ada 2-3 titik bocor yang jelas. Aku bisa bantu petakan persisnya lewat Audit (Rp 1,5jt, dan kalau lanjut full build, biaya audit balik). Atau chat dulu gratis biar aku kasih 1-2 perbaikan cepat." },
+  { min:9, name:"Bocor besar — banyak yang lolos", color:"#d4763a",
+    desc:"Ember kamu bocor di beberapa tempat sekaligus. Inquiry masuk tapi banyak yang nggak ke-respons cepat, nggak di-follow-up, dan kamu nggak tahu berapa yang hilang. Ini biasanya kerugian jutaan/bulan yang nggak keliatan di laporan.",
+    nextT:"Kamu lagi 'numpahin' calon customer", nextB:"Kabar baiknya: ini paling cepat naik begitu sistemnya dibenerin. Mulai dari Audit (Rp 1,5jt) buat lihat persis di mana duitnya bocor + estimasi berapa yang bisa diselamatin. Chat dulu yuk, aku jelasin langkahnya." },
+  { min:0, name:"Bocor parah — ember tanpa dasar", color:"#d44637",
+    desc:"Hampir semua tahap pipeline-mu bocor: capture berantakan, respons lambat, nyaris nggak ada follow-up, dan nggak ada tracking. Setiap rupiah yang kamu keluarin buat marketing kemungkinan besar netes keluar sebelum jadi customer.",
+    nextT:"Ini yang paling mendesak dibenerin", nextB:"Ini bukan buat nakut-nakutin — justru posisi dengan potensi naik paling besar, karena perbaikan dasar langsung kerasa. Yuk chat, aku bantu petain dari mana mulai (mulai dari Audit Rp 1,5jt yang konkret, bukan teori)." },
+];
+
+document.getElementById('seeResult').addEventListener('click',()=>{
+  let score=0; const catScore=[0,0,0,0]; const catMax=[0,0,0,0];
+  QUESTIONS.forEach((sec,si)=>{
+    sec.items.forEach((it,ii)=>{
+      const sel=document.querySelector('input[name="q_'+si+'_'+ii+'"]:checked');
+      const max=Math.max(...it.opts.map(o=>o[1]));
+      catMax[si]+=max;
+      if(sel){ score+=+sel.value; catScore[si]+=+sel.value; }
+    });
+  });
+  const tier = TIERS.find(t=>score>=t.min);
+  const pctHealthy = Math.round(score/MAX*100);
+  const pctLeak = 100-pctHealthy;
+
+  document.getElementById('rScore').textContent=score;
+  document.getElementById('rTier').textContent=tier.name;
+  document.getElementById('rDesc').textContent=tier.desc;
+  const fill=document.getElementById('rFill');
+  fill.style.width=pctHealthy+'%'; fill.style.background=tier.color;
+
+  const catNames=["Capture","Speed","Consistency","Follow-up & Tracking"];
+  const bd=document.getElementById('rBreak'); bd.innerHTML='';
+  catNames.forEach((n,i)=>{
+    const row=document.createElement('div'); row.className='brow';
+    row.innerHTML='<span class="bk">'+n+'</span><span class="bv">'+catScore[i]+' / '+catMax[i]+'</span>';
+    bd.appendChild(row);
+  });
+
+  document.getElementById('nextTitle').textContent=tier.nextT;
+  document.getElementById('nextBody').textContent=tier.nextB;
+
+  const msg='Halo Gamma, aku baru isi self-audit AI Lead Rescue. Skorku '+score+'/36 ('+tier.name+'). Mau ngobrol soal cara nutup kebocorannya.';
+  document.getElementById('waBtn').href='https://wa.me/'+WA+'?text='+encodeURIComponent(msg);
+
+  document.getElementById('result').style.display='block';
+  document.getElementById('result').scrollIntoView({behavior:'smooth'});
+});
+</script>
+</body>
+</html>
